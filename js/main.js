@@ -138,29 +138,42 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
 
+  const div = document.createElement('div');
+  div.className = 'flex-card';
+  li.append(div);
+
+  const imgBox = document.createElement('div');
+  imgBox.className = 'flex-card-img';
+  div.append(imgBox);
+
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  li.append(image);
+  imgBox.append(image);
+
+  const contentBox = document.createElement('div');
+  contentBox.className = 'flex-card-content';
+  div.append(contentBox);
 
   const name = document.createElement('h1');
   name.innerHTML = restaurant.name;
-  li.append(name);
+  contentBox.append(name);
 
   const neighborhood = document.createElement('p');
   neighborhood.innerHTML = restaurant.neighborhood;
-  li.append(neighborhood);
+  contentBox.append(neighborhood);
 
   const address = document.createElement('p');
+  address.className = 'address';
   address.innerHTML = restaurant.address;
-  li.append(address);
+  contentBox.append(address);
 
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
-  li.append(more)
+  contentBox.append(more)
 
-  return li
+  return li;
 }
 
 /**

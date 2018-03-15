@@ -270,9 +270,11 @@ section {
     font-family: Arial, sans-serif;
     margin: 16px;
     min-height: 380px;
-    padding: 0 30px 25px;
+    padding: 16px;
+    /*padding: 0 30px 25px;*/
     text-align: left;
     width: calc(100% - 32px);
+    display: flex;
 }
 
 @media (min-width: 600px) {
@@ -287,9 +289,27 @@ section {
     }
 }
 
+.flex-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.flex-card-content {
+  display: flex;
+  flex-direction: column;
+  /*grow so space in flex-card container is filled*/
+  flex: 1 0 auto;
+}
+
+/*push button to card bottom*/
+.address {
+  flex: 1 0 auto;
+}
+
 #restaurants-list .restaurant-img {
     background-color: #ccc;
-    display: block;
+    /*display: block;*/
     margin: 0;
     max-width: 100%;
     /*min-height: 248px;*/
