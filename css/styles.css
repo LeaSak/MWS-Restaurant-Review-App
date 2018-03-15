@@ -1,5 +1,6 @@
 @charset "utf-8";
 
+
 /* CSS Document */
 
 html {
@@ -76,45 +77,47 @@ section {
 }
 
 
+
 /* ====================== Grid ====================== */
 
+
 /*Makes container flex*/
+
 .flex-container {
-  max-width: 1020px;
-  margin: 0 auto;
-  display: flex;
-  flex-flow: row wrap;
-  border: 1px solid red;
-  padding: 16px;
+    max-width: 1020px;
+    margin: 0 auto;
+    display: flex;
+    flex-flow: row wrap;
+    border: 1px solid red;
+    padding: 16px;
 }
 
 .container {
-  max-width: 1020px;
-  margin: 0 auto;
-  border: 1px solid red;
-  padding: 16px;
+    max-width: 1020px;
+    margin: 0 auto;
+    border: 1px solid red;
+    padding: 16px;
 }
 
-@media (min-width: 480px){
-  .flex-container,
-  .container {
-    width: 90%;
-  }
+@media (min-width: 480px) {
+    .flex-container,
+    .container {
+        width: 90%;
+    }
 }
 
-@media (min-width: 600px){
-  .flex-container,
-  .container {
-    width: 100%;
-  }
-
+@media (min-width: 600px) {
+    .flex-container,
+    .container {
+        width: 100%;
+    }
 }
 
 @media (min-width: 960px) {
     .flex-container,
     .container {
-    width: 90%;
-  }
+        width: 90%;
+    }
 }
 
 #maincontent {
@@ -122,24 +125,26 @@ section {
     min-height: 100%;
 }
 
+
 /* ====================== Navigation ====================== */
 
 #primary {
     background-color: #252831;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid red;
+    padding: 16px;
+    min-height: 80px;
 }
 
-#brand {
-  align-items: center;
-  justify-content: center;
-  min-height: 80px;
-}
-
-#brand h1 {
+#primary h1 {
     margin: auto;
     text-align: center;
 }
 
-#brand h1 a {
+#primary h1 a {
     color: #fff;
     font-size: 14pt;
     font-weight: 200;
@@ -149,18 +154,18 @@ section {
 }
 
 #secondary {
-  padding: 0;
-  background-color: #eee;
-
+    padding: 0;
+    background-color: #eee;
 }
 
 #breadcrumb {
     /*padding: 10px 40px 16px;*/
     list-style: none;
-/*    background-color: #eee;*/
-   font-size: 17px;
-   /* margin: 0;*/
+    /*    background-color: #eee;*/
+    font-size: 17px;
+    /* margin: 0;*/
 }
+
 
 
 /* Display list items side by side */
@@ -168,6 +173,7 @@ section {
 #breadcrumb li {
     display: inline;
 }
+
 
 
 /* Add a slash symbol (/) before/behind each list item */
@@ -179,12 +185,14 @@ section {
 }
 
 
+
 /* Add a color to all links inside the list */
 
 #breadcrumb li a {
     color: #0275d8;
     text-decoration: none;
 }
+
 
 
 /* Add a color on mouse-over */
@@ -195,6 +203,7 @@ section {
 }
 
 
+
 /* ====================== Map ====================== */
 
 #map {
@@ -202,6 +211,7 @@ section {
     width: 100%;
     background-color: #ccc;
 }
+
 
 /* ====================== Restaurant Filtering ====================== */
 
@@ -235,7 +245,6 @@ section {
     margin: 16px;
     padding: 0 10px;
     width: calc(100% - 32px);
-
 }
 
 @media (min-width: 600px) {
@@ -243,6 +252,7 @@ section {
         width: calc(33.33% - 32px);
     }
 }
+
 
 
 /* ====================== Restaurant Listing ====================== */
@@ -272,7 +282,7 @@ section {
 }
 
 @media (min-width: 960px) {
-    #restaurants-list li{
+    #restaurants-list li {
         width: calc(33.33% - 32px);
     }
 }
@@ -316,6 +326,7 @@ section {
 }
 
 
+
 /* ====================== Restaurant Details ====================== */
 
 #restaurant-name {
@@ -332,18 +343,18 @@ section {
 }
 
 #restaurant-img-wrapper {
-  margin: 16px;
-  width: calc(100% - 32px);
+    margin: 16px;
+    width: calc(100% - 32px);
 }
 
 #restaurant-img {
-  width: 100%;
-  max-width: 100%;
+    width: 100%;
+    max-width: 100%;
 }
 
 #restaurant-info {
-  width: calc(100% - 32px);
-  margin: 16px;
+    width: calc(100% - 32px);
+    margin: 16px;
 }
 
 #restaurant-address {
@@ -365,10 +376,9 @@ section {
 }
 
 @media (min-width: 730px) {
-  
-  #restaurant-info,
-  #restaurant-img-wrapper
-   {
+
+    #restaurant-info,
+    #restaurant-img-wrapper {
         width: calc(50% - 32px);
     }
 }
@@ -411,16 +421,16 @@ section {
     overflow: hidden;
     padding: 16px;
     width: calc(100% - 32px);
-/*    padding: 0 20px 20px;*/
+    /*    padding: 0 20px 20px;*/
     /*position: relative;*/
     /*width: 100%; */
     max-width: 600px;
 }
 
-@media (min-width: 720px){
-  #reviews-list li {
-    width: calc(50% - 32px);
-  }
+@media (min-width: 720px) {
+    #reviews-list li {
+        width: calc(50% - 32px);
+    }
 }
 
 #reviews-list li p {
@@ -431,10 +441,11 @@ section {
     color: #666;
 }
 
+
 /* ====================== Footer ====================== */
 
 footer {
-  background-color: #444;
+    background-color: #444;
 }
 
 #footer {
@@ -444,10 +455,12 @@ footer {
     padding: 25px;
     text-align: center;
     text-transform: uppercase;
+    display: flex;
+    flex-flow: row wrap;
     align-items: center;
     justify-content: center;
 }
 
 #footer a {
-  padding: 0 8px;
+    padding: 0 8px;
 }
