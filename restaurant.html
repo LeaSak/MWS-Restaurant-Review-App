@@ -2,71 +2,77 @@
 <html>
 
 <head>
-  <!-- Normalize.css for better cross-browser consistency -->
-  <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
-  <!-- Main CSS file -->
-  <link rel="stylesheet" href="css/styles.css" type="text/css">
-    <!-- TODO: Add meta viewport tag -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Restaurant Info</title>
+    <!-- Normalize.css for better cross-browser consistency -->
+    <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
+    <!-- Main CSS file -->
+    <link rel="stylesheet" href="css/styles.css" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Restaurant Info</title>
 </head>
 
 <body class="inside">
-  <!-- Beginning header -->
-  <header class="wrapper">
-    <!-- Beginning nav -->
-    <nav class="grid-cell">
-      <h1><a href="/">Restaurant Reviews</a></h1>
-    </nav>
-    <!-- Beginning breadcrumb -->
-    <ul class="grid-cell" id="breadcrumb">
-      <li><a href="/">Home</a></li>
-    </ul>
+    <!-- Beginning header -->
+    <header>
+        <!-- Beginning nav -->
+        <nav id="primary">
+            <div class="flex-container" id="brand">
+              <h1><a href="/">Restaurant Reviews</a></h1>
+            </div>
+        </nav>
+        <!-- End nav -->
+        <!-- TODO: add aria to distinguish between navigation -->
+        <!-- Beginning breadcrumb -->
+        <nav id="secondary">
+            <ul class="container" id="breadcrumb">
+                <li><a href="/">Home</a></li>
+            </ul>
+        </nav>
     <!-- End breadcrumb -->
-    <!-- End nav -->
-  </header>
-  <!-- End header -->
-
-  <!-- Beginning main -->
-  <main class="wrapper" id="maincontent">
-    <!-- Beginning map -->
-    <section class="grid-cell" id="map-container">
-      <div id="map"></div>
-    </section>
-    <!-- End map -->
-    <!-- Beginning restaurant -->
-    <section class="grid-cell" id="restaurant-container">
-      <h1 id="restaurant-name"></h1>
-      <img id="restaurant-img">
-      <p id="restaurant-cuisine"></p>
-      <p id="restaurant-address"></p>
-      <table id="restaurant-hours"></table>
-    </section>
-    <!-- end restaurant -->
-    <!-- Beginning reviews -->
-    <section class="grid-cell" id="reviews-container">
-      <ul id="reviews-list"></ul>
-    </section>
-    <!-- End reviews -->
-  </main>
-  <!-- End main -->
-
-  <!-- Beginning footer -->
-  <footer class="wrapper" id="footer">
-    Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
-  </footer>
-  <!-- End footer -->
-
-  <!-- Beginning scripts -->
-  <!-- Database helpers -->
-  <script type="text/javascript" src="js/dbhelper.js"></script>
-  <!-- Main javascript file -->
-  <script type="text/javascript" src="js/restaurant_info.js"></script>
-  <!-- Google Maps -->
-  <!-- TODO: Add Google Maps API Key -->
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_tKbW6A5pQ-eupxI56myUnHLqYCzOjKo&libraries=places&callback=initMap"></script>
-  <!-- End scripts -->
-
+    </header>
+    <!-- End header -->
+    <!-- Beginning main -->
+    <main id="maincontent">
+        <!-- Beginning map -->
+        <section>
+            <div id="map"></div>
+        </section>
+        <!-- End map -->
+        <!-- Beginning restaurant -->
+        <section class="flex-container" id="restaurant-container">
+            <h1 id="restaurant-name"></h1>
+            <div id="restaurant-img-wrapper">
+              <img id="restaurant-img">
+            </div>
+            <div id="restaurant-info">
+                <p id="restaurant-cuisine"></p>
+                <p id="restaurant-address"></p>
+                <table id="restaurant-hours"></table>
+            </div>
+        </section>
+        <!-- end restaurant -->
+        <!-- Beginning reviews -->
+        <section class="container" id="reviews-container">
+            <ul id="reviews-list"></ul>
+        </section>
+        <!-- End reviews -->
+    </main>
+    <!-- End main -->
+    <!-- Beginning footer -->
+    <footer>
+        <div class="flex-container" id="footer">
+            Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
+        </div>
+    </footer>
+    <!-- End footer -->
+    <!-- Beginning scripts -->
+    <!-- Database helpers -->
+    <script type="text/javascript" src="js/dbhelper.js"></script>
+    <!-- Main javascript file -->
+    <script type="text/javascript" src="js/restaurant_info.js"></script>
+    <!-- Google Maps -->
+    <!-- TODO: Add Google Maps API Key -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_tKbW6A5pQ-eupxI56myUnHLqYCzOjKo&libraries=places&callback=initMap"></script>
+    <!-- End scripts -->
 </body>
 
 </html>

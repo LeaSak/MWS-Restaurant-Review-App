@@ -10,40 +10,37 @@
 
 <body>
     <!-- row 1-->
-    <header class="wrapper">
-        <nav class="grid-cell">
-            <h1><a href="/">Restaurant Reviews</a></h1>
+    <header>
+        <nav id="primary">
+            <div class="flex-container" id="brand">
+              <h1><a href="/">Restaurant Reviews</a></h1>
+            </div>
         </nav>
     </header>
-    <!-- TODO: Make this the flex-parent-->
-    <main class="wrapper" id="maincontent">
-        <!-- row 2 - flex-child-->
-        <section class="grid-cell" id="map-container">
+    <main id="maincontent">
+        <section>
             <div id="map"></div>
         </section>
-        <!-- Flex child - row 3 -->
-        <section class="grid-cell" id="filter-container">
-            <div class="filter-options">
-                <!-- sub row 1 -->
+        <section id="filter-container">
+            <div class="flex-container filter-options">
                 <h2>Filter Results</h2>
-                <!-- sub row 2 -->
                 <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
                     <option value="all">All Neighborhoods</option>
                 </select>
-                <!-- sub row 2 -->
                 <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
                     <option value="all">All Cuisines</option>
                 </select>
             </div>
         </section>
-        <!-- row 4-->
-        <section class="grid-cell">
-            <ul id="restaurants-list"></ul>
+        <section>
+            <ul class="flex-container" id="restaurants-list"></ul>
         </section>
     </main>
     <!--  row 5 -->
-    <footer class="wrapper" id="footer">
-        Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
+    <footer>
+        <div class="flex-container" id="footer">
+            Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
+        </div>
     </footer>
     <!-- Scripts -->
     <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
