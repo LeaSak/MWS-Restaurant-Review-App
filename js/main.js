@@ -164,8 +164,8 @@ createRestaurantHTML = (restaurant) => {
   contentBox.append(neighborhood);
 
   const address = document.createElement('p');
-  address.className = 'address';
   address.innerHTML = restaurant.address;
+  address.className = 'address';
   contentBox.append(address);
 
   const more = document.createElement('a');

@@ -1,6 +1,7 @@
 @charset "utf-8";
 
 
+
 /* CSS Document */
 
 html {
@@ -78,6 +79,7 @@ section {
 
 
 
+
 /* ====================== Grid ====================== */
 
 
@@ -126,6 +128,7 @@ section {
 }
 
 
+
 /* ====================== Navigation ====================== */
 
 #primary {
@@ -168,11 +171,13 @@ section {
 
 
 
+
 /* Display list items side by side */
 
 #breadcrumb li {
     display: inline;
 }
+
 
 
 
@@ -186,12 +191,14 @@ section {
 
 
 
+
 /* Add a color to all links inside the list */
 
 #breadcrumb li a {
     color: #0275d8;
     text-decoration: none;
 }
+
 
 
 
@@ -204,6 +211,7 @@ section {
 
 
 
+
 /* ====================== Map ====================== */
 
 #map {
@@ -211,6 +219,7 @@ section {
     width: 100%;
     background-color: #ccc;
 }
+
 
 
 /* ====================== Restaurant Filtering ====================== */
@@ -255,6 +264,7 @@ section {
 
 
 
+
 /* ====================== Restaurant Listing ====================== */
 
 #restaurants-list {
@@ -290,21 +300,23 @@ section {
 }
 
 .flex-card {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .flex-card-content {
-  display: flex;
-  flex-direction: column;
-  /*grow so space in flex-card container is filled*/
-  flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    /*grow so space in flex-card container is filled*/
+    flex: 1 0 auto;
 }
 
+
 /*push button to card bottom*/
+
 .address {
-  flex: 1 0 auto;
+    flex: 1 0 auto;
 }
 
 #restaurants-list .restaurant-img {
@@ -344,6 +356,7 @@ section {
     text-decoration: none;
     text-transform: uppercase;
 }
+
 
 
 
@@ -439,9 +452,9 @@ section {
     margin: 16px;
     /*margin: 0 0 30px;*/
     overflow: hidden;
-    padding: 16px;
+    /*padding: 16px;*/
     width: calc(100% - 32px);
-    /*    padding: 0 20px 20px;*/
+    /*padding: 0 20px 20px;*/
     /*position: relative;*/
     /*width: 100%; */
     max-width: 600px;
@@ -453,13 +466,48 @@ section {
     }
 }
 
-#reviews-list li p {
-    margin: 0 0 10px;
+.name-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: #444;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.name-container p {
+    color: #fff;
+}
+
+.name-container p:first-child {
+    font-size: 16px;
+    margin: 0;
+}
+
+.review-date {
+    margin: 0 0 0 auto;
+}
+
+
+.rating {
+    padding: 8px;
+    width: 20%;
+    margin: 0 0 0 16px;
+    background: orange;
+    text-align: center;
+    border-radius: 5px;
+    min-width: 80px;
+}
+
+.comments {
+    padding: 16px;
+    margin: 0;
 }
 
 #restaurant-hours td {
     color: #666;
 }
+
 
 
 /* ====================== Footer ====================== */
