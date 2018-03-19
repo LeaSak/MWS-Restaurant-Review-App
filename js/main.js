@@ -138,13 +138,9 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
 
-  const div = document.createElement('div');
-  div.className = 'flex-card';
-  li.append(div);
-
   const imgBox = document.createElement('div');
   imgBox.className = 'flex-card-img';
-  div.append(imgBox);
+  li.append(imgBox);
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
@@ -153,14 +149,15 @@ createRestaurantHTML = (restaurant) => {
 
   const contentBox = document.createElement('div');
   contentBox.className = 'flex-card-content';
-  div.append(contentBox);
+  li.append(contentBox);
 
-  const name = document.createElement('h1');
+  const name = document.createElement('h3');
   name.innerHTML = restaurant.name;
   contentBox.append(name);
 
   const neighborhood = document.createElement('p');
   neighborhood.innerHTML = restaurant.neighborhood;
+  neighborhood.className = 'neighborhood';
   contentBox.append(neighborhood);
 
   const address = document.createElement('p');
