@@ -15,50 +15,50 @@
     <!-- Beginning header -->
     <header>
         <!-- Beginning nav -->
-        <nav id="primary">
-            <h1><a href="/">Restaurant Reviews</a></h1>
+        <nav class="primary-nav">
+            <h1 class="header-title"><a class="header-link" href="/">Restaurant Reviews</a></h1>
         </nav>
         <!-- End nav -->
         <!-- TODO: add aria to distinguish between navigation -->
         <!-- Beginning breadcrumb -->
-        <nav id="secondary">
-            <ul class="card-container" id="breadcrumb">
-                <li><a href="/">Home</a></li>
+        <nav class="secondary-nav">
+            <ul class="breadcrumb-grid" id="breadcrumb">
+                <li class="breadcrumb-item"><a class="breadcrumb-link" href="/">Home</a></li>
             </ul>
         </nav>
         <!-- End breadcrumb -->
     </header>
     <!-- End header -->
     <!-- Beginning main -->
-    <main id="maincontent">
+    <main class="main-content">
         <!-- Beginning restaurant -->
-        <section class="card-container" id="restaurant-container">
-            <div class="card-cell" id="restaurant-img-wrapper">
-                <img id="restaurant-img">
+        <section class="showcase-grid" id="restaurant-container">
+            <div class="showcase-cell-lg">
+                <img class="restaurant-img" id="restaurant-img">
             </div>
-            <div class="card-cell" id="restaurant-name-wrapper">
-                <p id="restaurant-cuisine"></p>
-                <h1 id="restaurant-name"></h1>
-                <p id="restaurant-address"></p>
+            <div class="showcase-cell-sm">
+                <p class="showcase-cuisine" id="restaurant-cuisine"></p>
+                <h1 class="showcase-name" id="restaurant-name"></h1>
+                <p class="showcase-address" id="restaurant-address"></p>
             </div>
-            <div class="card-cell" id="restaurant-hours-wrapper">
-                <table id="restaurant-hours"></table>
+            <div class="showcase-cell-sm">
+                <table class="showcase-hrs" id="restaurant-hours"></table>
             </div>
-            <div class="card-cell" id="restaurant-map-wrapper">
+            <div class="showcase-cell-lg">
                 <div id="map"></div>
             </div>
         </section>
         <!-- end restaurant -->
         <!-- Beginning reviews -->
-        <section class="card-container" id="reviews-container">
-            <ul id="reviews-list"></ul>
+        <section class="reviews-grid" id="reviews-container">
+            <ul class="reviews-list" id="reviews-list"></ul>
         </section>
         <!-- End reviews -->
     </main>
     <!-- End main -->
     <!-- Beginning footer -->
-    <footer class="section-border" id="footer">
-        Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
+    <footer class="footer-grid">
+        Copyright (c) 2017 <a class="footer-link" href="/">Restaurant Reviews</a> All Rights Reserved.
     </footer>
     <!-- End footer -->
     <!-- Beginning scripts -->

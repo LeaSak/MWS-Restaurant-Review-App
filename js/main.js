@@ -137,6 +137,7 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  */
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
+  li.className = 'restaurant-list-item';
 
   const imgBox = document.createElement('div');
   imgBox.className = 'flex-card-img';
@@ -153,6 +154,7 @@ createRestaurantHTML = (restaurant) => {
 
   const name = document.createElement('h3');
   name.innerHTML = restaurant.name;
+  name.className = 'restaurant-list-heading';
   contentBox.append(name);
 
   const neighborhood = document.createElement('p');
@@ -166,6 +168,7 @@ createRestaurantHTML = (restaurant) => {
   contentBox.append(address);
 
   const more = document.createElement('a');
+  more.className = 'restaurant-link';
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
   contentBox.append(more)

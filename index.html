@@ -13,38 +13,38 @@
 <body>
     <!-- row 1-->
     <header>
-        <nav id="primary">
-            <h1><a href="/">Restaurant Reviews</a></h1>
+        <nav class="primary-nav">
+            <h1 class="header-title"><a class="header-link" href="/">Restaurant Reviews</a></h1>
         </nav>
     </header>
-    <main id="maincontent">
-        <section class="container" id="map-container">
+    <main class="main-content">
+        <section class="map-grid">
             <div id="map"></div>
         </section>
         <section>
-            <div class="flex-container filter-options">
-                <h2>Filter Results</h2>
+            <div class="filter-grid">
+                <h2 class="title-sm">Filter Results</h2>
                 <div class="results-filter">
-                    <label for="neighborhoods-select">By Area</label>
-                    <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
+                    <label class="label" for="neighborhoods-select">By Area</label>
+                    <select class="select-bar" id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
                         <option value="all">All Neighborhoods</option>
                     </select>
                 </div>
                 <div class="results-filter">
-                    <label for="cuisines-select">By Cuisine</label>
-                    <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
+                    <label class="label" for="cuisines-select">By Cuisine</label>
+                    <select class="select-bar" id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
                         <option value="all">All Cuisines</option>
                     </select>
                 </div>
             </div>
         </section>
         <section>
-            <ul class="flex-container" id="restaurants-list"></ul>
+            <ul class="restaurants-grid" id="restaurants-list"></ul>
         </section>
     </main>
     <!--  row 5 -->
-    <footer class="section-border" id="footer">
-        Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
+    <footer class="footer-grid">
+        Copyright (c) 2017 <a class="footer-link" href="/">Restaurant Reviews</a> All Rights Reserved.
     </footer>
     <!-- Scripts -->
     <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
