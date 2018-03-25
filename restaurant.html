@@ -5,7 +5,7 @@
     <!-- Normalize.css for better cross-browser consistency -->
     <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
     <!-- Main CSS file -->
-    <link href="https://fonts.googleapis.com/css?family=Work+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,500,600,700,800" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css" type="text/css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Restaurant Info</title>
@@ -33,18 +33,23 @@
     <main class="main-content">
         <!-- Beginning restaurant -->
         <section class="showcase-grid" id="restaurant-container">
-            <div class="showcase-cell-lg">
+            <div class="showcase-cell">
                 <img class="restaurant-img" id="restaurant-img">
             </div>
-            <div class="showcase-cell-sm">
-                <p class="showcase-cuisine" id="restaurant-cuisine"></p>
-                <h1 class="showcase-name" id="restaurant-name"></h1>
-                <p class="showcase-address" id="restaurant-address"></p>
+            <div class="showcase-cell-flex">
+                <h3 class="showcase-name" id="restaurant-name"></h3>
+                <div class="info-tile">
+                    <h3 class="info-title" id="cuisine-title"></h3>
+                    <p class="showcase-cuisine" id="restaurant-cuisine"></p>
+                    <h3 class="info-title" id="address-title"></h3>
+                    <p class="showcase-address" id="restaurant-address"></p>
+                </div>
+                <div class="info-tile">
+                    <h3 class="info-title" id="hours-title"></h3>
+                    <table class="showcase-hrs" id="restaurant-hours"></table>
+                </div>
             </div>
-            <div class="showcase-cell-sm">
-                <table class="showcase-hrs" id="restaurant-hours"></table>
-            </div>
-            <div class="showcase-cell-lg">
+            <div class="showcase-cell">
                 <div id="map"></div>
             </div>
         </section>

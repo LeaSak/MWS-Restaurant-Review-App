@@ -52,17 +52,26 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
     const name = document.getElementById('restaurant-name');
     name.innerHTML = restaurant.name;
 
+    const addressTitle = document.getElementById('address-title');
+    addressTitle.innerHTML = 'Address';
+
     const address = document.getElementById('restaurant-address');
     address.innerHTML = restaurant.address;
 
     const image = document.getElementById('restaurant-img');
     image.src = DBHelper.imageUrlForRestaurant(restaurant);
 
+    const cuisineTitle = document.getElementById('cuisine-title');
+    cuisineTitle.innerHTML = 'Cuisine';
+
     const cuisine = document.getElementById('restaurant-cuisine');
     cuisine.innerHTML = restaurant.cuisine_type;
 
     // fill operating hours
     if (restaurant.operating_hours) {
+        const hourTitle = document.getElementById('hours-title');
+        hourTitle.innerHTML = 'Operating Hours';
+        
         fillRestaurantHoursHTML();
     }
     // fill reviews
