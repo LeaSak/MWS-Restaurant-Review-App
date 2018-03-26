@@ -1,0 +1,25 @@
+{
+  "name": "mws-restaurant-stage-1",
+  "version": "1.0.0",
+  "description": "Stage 1 of Udacity Project in Mobile Web Specialist Nanodegree",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeaSak/mws-restaurant-stage-1.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LeaSak/mws-restaurant-stage-1/issues"
+  },
+  "homepage": "https://github.com/LeaSak/mws-restaurant-stage-1#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  },
+  "dependencies": {
+    "npm": "^5.8.0"
+  }
+}
