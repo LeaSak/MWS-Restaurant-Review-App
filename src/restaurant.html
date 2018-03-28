@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <!-- Normalize.css for better cross-browser consistency -->
@@ -22,7 +22,7 @@
         <!-- TODO: add aria to distinguish between navigation -->
         <!-- Beginning breadcrumb -->
         <nav class="secondary-nav">
-            <ul class="breadcrumb-grid" id="breadcrumb">
+            <ul class="breadcrumb-grid" id="breadcrumb" aria-label="Breadcrumb">
                 <li class="breadcrumb-item"><a class="breadcrumb-link" href="/">Home</a></li>
             </ul>
         </nav>
@@ -36,21 +36,21 @@
             <div class="showcase-cell">
                 <img class="restaurant-img" id="restaurant-img">
             </div>
-            <div class="showcase-cell-flex">
+            <div class="showcase-cell-flex" aria-labelledby="restaurant-name">
                 <h3 class="showcase-name" id="restaurant-name"></h3>
                 <div class="info-tile">
                     <h3 class="info-title" id="cuisine-title"></h3>
-                    <p class="showcase-cuisine" id="restaurant-cuisine"></p>
+                    <p aria-labelledby="cuisine-title" class="showcase-cuisine" id="restaurant-cuisine"></p>
                     <h3 class="info-title" id="address-title"></h3>
-                    <p class="showcase-address" id="restaurant-address"></p>
+                    <p aria-labelledby="address-title" class="showcase-address" id="restaurant-address"></p>
                 </div>
                 <div class="info-tile">
                     <h3 class="info-title" id="hours-title"></h3>
-                    <table class="showcase-hrs" id="restaurant-hours"></table>
+                    <table aria-labelledby="hours-title" class="showcase-hrs" id="restaurant-hours"></table>
                 </div>
             </div>
             <div class="showcase-cell">
-                <div id="map"></div>
+                <div aria-label="interactive map" role="application" id="map"></div>
             </div>
         </section>
         <!-- end restaurant -->

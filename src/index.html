@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
@@ -10,38 +10,35 @@
 </head>
 
 <body>
-    <!-- row 1-->
     <header>
         <nav class="primary-nav">
             <h1 class="header-title"><a class="header-link" href="/">Restaurant Reviews</a></h1>
         </nav>
     </header>
+    <a class="skip-main" href="#filter-section">Skip to main content</a>
     <main class="main-content">
         <section class="map-grid">
-            <div id="map"></div>
+            <div aria-label="interactive map with restaurant markers" role="application" id="map"></div>
         </section>
-        <section>
-            <div class="filter-grid">
-                <h2 class="title-sm">Filter Results</h2>
-                <div class="results-filter">
-                    <label class="label" for="neighborhoods-select">By Area</label>
-                    <select class="select-bar" id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
-                        <option value="all">All Neighborhoods</option>
-                    </select>
-                </div>
-                <div class="results-filter">
-                    <label class="label" for="cuisines-select">By Cuisine</label>
-                    <select class="select-bar" id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
-                        <option value="all">All Cuisines</option>
-                    </select>
-                </div>
+        <section class="filter-grid" aria-labelledby="filter-heading" id="filter-section" tabindex="-1">
+            <h2 id="filter-heading" class="title-sm">Filter Results</h2>
+            <div class="results-filter">
+                <label class="label" for="neighborhoods-select">By Area</label>
+                <select class="select-bar" id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
+                    <option value="all">All Neighborhoods</option>
+                </select>
+            </div>
+            <div class="results-filter">
+                <label class="label" for="cuisines-select">By Cuisine</label>
+                <select class="select-bar" id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
+                    <option value="all">All Cuisines</option>
+                </select>
             </div>
         </section>
         <section>
             <ul class="restaurants-grid" id="restaurants-list"></ul>
         </section>
     </main>
-    <!--  row 5 -->
     <footer class="footer-grid">
         Copyright (c) 2017 <a class="footer-link" href="/">Restaurant Reviews</a> All Rights Reserved.
     </footer>

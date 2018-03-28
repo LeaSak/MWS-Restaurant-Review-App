@@ -23,7 +23,7 @@ const fetchNeighborhoods = () => {
       fillNeighborhoodsHTML();
     }
   });
-}
+};
 
 /**
  * Set neighborhoods HTML.
@@ -36,7 +36,7 @@ const fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
     option.value = neighborhood;
     select.append(option);
   });
-}
+};
 
 /**
  * Fetch all cuisines and set their HTML.
@@ -50,7 +50,7 @@ const fetchCuisines = () => {
       fillCuisinesHTML();
     }
   });
-}
+};
 
 /**
  * Set cuisines HTML.
@@ -64,7 +64,7 @@ const fillCuisinesHTML = (cuisines = self.cuisines) => {
     option.value = cuisine;
     select.append(option);
   });
-}
+};
 
 /**
  * Initialize Google map, called from HTML.
@@ -80,7 +80,7 @@ window.initMap = () => {
     scrollwheel: false
   });
   updateRestaurants();
-}
+};
 
 /**
  * Update page and map for current restaurants.
@@ -102,8 +102,8 @@ const updateRestaurants = () => {
       resetRestaurants(restaurants);
       fillRestaurantsHTML();
     }
-  })
-}
+  });
+};
 
 /**
  * Clear current restaurants, their HTML and remove their map markers.
@@ -118,7 +118,7 @@ const resetRestaurants = (restaurants) => {
   self.markers.forEach(m => m.setMap(null));
   self.markers = [];
   self.restaurants = restaurants;
-}
+};
 
 /**
  * Create all restaurants HTML and add them to the webpage.
@@ -129,7 +129,7 @@ const fillRestaurantsHTML = (restaurants = self.restaurants) => {
     ul.append(createRestaurantHTML(restaurant));
   });
   addMarkersToMap();
-}
+};
 
 /**
  * Create restaurant HTML.
@@ -147,6 +147,7 @@ const createRestaurantHTML = (restaurant) => {
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
   image.sizes = '(min-width: 600px) 50vw, (min-width: 960px) 33.33vw, 100vw';
   image.srcset = DBHelper.srcsetForRestaurant(restaurant);
+  image.setAttribute('alt', restaurant.alt);
   imgBox.append(image);
 
   const contentBox = document.createElement('div');
@@ -170,12 +171,12 @@ const createRestaurantHTML = (restaurant) => {
 
   const more = document.createElement('a');
   more.className = 'restaurant-link';
-  more.innerHTML = 'View Details';
+  more.innerHTML = 'View Venue';
   more.href = DBHelper.urlForRestaurant(restaurant);
-  contentBox.append(more)
+  contentBox.append(more);
 
   return li;
-}
+};
 
 /**
  * Add markers for current restaurants to the map.
@@ -185,8 +186,8 @@ const addMarkersToMap = (restaurants = self.restaurants) => {
     // Add marker to the map
     const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.map);
     google.maps.event.addListener(marker, 'click', () => {
-      window.location.href = marker.url
+      window.location.href = marker.url;
     });
     self.markers.push(marker);
   });
-}
+};
