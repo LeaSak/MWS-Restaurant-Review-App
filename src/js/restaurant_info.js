@@ -9,6 +9,7 @@ window.initMap = () => {
         if (error) { // Got an error!
             console.error(error);
         } else {
+            let setTitle = () => document.querySelector('#map iframe').setAttribute('title', 'Map with restaurant marker');
             self.map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 16,
                 center: restaurant.latlng,
@@ -16,6 +17,7 @@ window.initMap = () => {
             });
             fillBreadcrumb();
             DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+            self.map.addListener('tilesloaded', setTitle);
         }
     });
 }
