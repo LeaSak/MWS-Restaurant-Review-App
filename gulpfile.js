@@ -2,7 +2,12 @@ const gulp = require('gulp'),
 	imageResize = require('gulp-image-resize'),
 	rename = require('gulp-rename'),
 	imagemin = require('gulp-imagemin'),
-	changed = require('gulp-changed');
+	htmlmin = require('gulp-htmlmin'),
+	cssnano = require('gulp-cssnano'),
+	sourcemaps = require('gulp-sourcemaps'),
+	babel = require('gulp-babel'),
+	uglify = require('gulp-uglify'),
+	pump = require('pump');
 
 const bases = {
 	src: 'src/',
@@ -10,39 +15,88 @@ const bases = {
 };
 
 const paths = {
-	html: ['index.html', 'restaurants.html'],
-	css: ['css','css/styles'],
-	js: ['js','js/dbhelper.js', 'js/main.js', 'js/restaurant_info.js'],
-	assets: ['img/','img/**/*.jpg'],
-	data: ['restaurants.json']
+	html: ['*.html','index.html', 'restaurants.html'],
+	css: ['css/','css/styles.css'],
+	js: ['js/','js/**/*.js','js/dbhelper.js', 'js/main.js', 'js/restaurant_info.js'],
+	assets: ['img/','img/*.jpg','img/tmp/','img/tmp/**/*.jpg'],
+	data: ['data/','data/restaurants.json']
 };
 
 const sizes = [400, 600, 800, 1200, 1500, 2000];
 const resizeImageTasks = [];
 
-gulp.task('default', () => {
-  // place code for your default task here
-  console.log("Gulp is set up");
+
+
+/* Minify HTML files*/
+gulp.task('minify-html', () => {
+	return gulp.src(bases.src + paths.html[0])
+	.pipe(htmlmin({collapseWhitespace: true}))
+		.pipe(gulp.dest(bases.dist))
 });
 
+/* Minify CSS */
+gulp.task('minify-css', () => {
+	return gulp.src(bases.src + paths.css[1])
+		.pipe(sourcemaps.init())
+		.pipe(cssnano())
+		.pipe(sourcemaps.write('.'))
+		.pipe(gulp.dest(bases.dist + paths.css[0]))
+});
+
+/* Make responsive images*/
 sizes.forEach((size) => {
 	const prefix = "-" + size;
 	gulp.task(prefix, () => {
 	return gulp.src(bases.src + paths.assets[1])
-		/*.pipe(changed(bases.dist + paths.assets[0]))*/
 		.pipe(imageResize({
 			width: size
 		}))
 		.pipe(rename(function (path){path.basename += prefix;}))
-		.pipe(gulp.dest(bases.src + paths.assets[0]))
+		.pipe(gulp.dest(bases.src + paths.assets[2]))
 	});
 	resizeImageTasks.push(prefix);
 });
 
-gulp.task('optimize-images', ['resizeImages'], () => {
-	return gulp.src(bases.src + paths.assets[1])
+gulp.task('resize-images', resizeImageTasks);
+
+/* Optimize images */
+gulp.task('optimize-images', ['resize-images'], () => {
+	return gulp.src(bases.src + paths.assets[3])
 	.pipe(imagemin([imagemin.jpegtran({progressive: true, optimizationLevel: 7})]))
-	.pipe(gulp.dest(bases.dist))
+	.pipe(gulp.dest(bases.dist + paths.assets[0]))
 });
 
-gulp.task('resizeImages', resizeImageTasks);
+/* Minify JS, sourcemaps, uglify */
+gulp.task('minify-js', () => {
+	pump([
+		gulp.src(bases.src + paths.js[1]),
+		sourcemaps.init(),
+		babel(),
+		uglify(),
+		sourcemaps.write('.'),
+		gulp.dest(bases.dist + paths.js[0])
+		])
+});
+
+/* Copy JSON*/
+gulp.task('copy-data', () => {
+	return gulp.src(bases.src + paths.data[1])
+	.pipe(gulp.dest(bases.dist + paths.data[0]))
+});
+
+/* Watch */
+gulp.task('watch', ['build'], () => {
+    gulp.watch(bases.src + paths.js[1], ['minify-js']);
+    gulp.watch(bases.src + paths.css[1], ['minify-css']);
+    gulp.watch(bases.src + paths.html[0], ['minify-html']);
+    gulp.watch(bases.src + paths.data[1], ['copy-data']);
+});
+
+/* Build task */
+gulp.task('build', ['minify-js', 'minify-css', 'minify-html', 'copy-data', 'optimize-images']);
+
+/* Default task */
+gulp.task('default', ['watch']);
+
+
+
