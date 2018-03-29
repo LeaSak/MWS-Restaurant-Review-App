@@ -10,12 +10,18 @@
 </head>
 
 <body>
+
+    <!-- Main navigation -->
     <header>
         <nav class="primary-nav">
             <h1 class="header-title"><a class="header-link" href="/">Restaurant Reviews</a></h1>
         </nav>
     </header>
+    
+    <!-- For Screen Readers - A link to skip Map -->
     <a class="skip-main" href="#filter-section">Skip to main content</a>
+    
+    <!-- Filter and Restaurant Content -->
     <main class="main-content">
         <section class="map-grid">
             <div aria-label="interactive map with restaurant markers" role="application" id="map"></div>
@@ -39,9 +45,12 @@
             <ul class="restaurants-grid" id="restaurants-list" role="content-list"></ul>
         </section>
     </main>
+    
+    <!-- Footer -->
     <footer class="footer-grid">
         Copyright (c) 2017 <a class="footer-link" href="/">Restaurant Reviews</a> All Rights Reserved.
     </footer>
+    
     <!-- Scripts -->
     <script src="js/dbhelper.js"></script>
     <script src="js/main.js"></script>
