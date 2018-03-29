@@ -2,9 +2,9 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.css">
     <link rel="stylesheet" href="css/styles.css">
-    <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,500,600,700,800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Work+Sans:400,500" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Restaurant Reviews</title>
 </head>
@@ -36,16 +36,17 @@
             </div>
         </section>
         <section>
-            <ul class="restaurants-grid" id="restaurants-list"></ul>
+            <ul class="restaurants-grid" id="restaurants-list" role="content-list"></ul>
         </section>
     </main>
     <footer class="footer-grid">
         Copyright (c) 2017 <a class="footer-link" href="/">Restaurant Reviews</a> All Rights Reserved.
     </footer>
     <!-- Scripts -->
-    <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
-    <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
+    <script src="js/dbhelper.js"></script>
+    <script src="js/main.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSQXjgi1K6hqDS4W3nWVK_z0lntlbLFPo&libraries=places&callback=initMap"></script>
+    <script src="sw.js"></script>
 </body>
 
 </html>

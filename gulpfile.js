@@ -19,7 +19,8 @@ const paths = {
 	css: ['css/','css/styles.css'],
 	js: ['js/','js/**/*.js','js/dbhelper.js', 'js/main.js', 'js/restaurant_info.js'],
 	assets: ['img/','img/*.jpg','img/tmp/','img/tmp/**/*.jpg'],
-	data: ['data/','data/restaurants.json']
+	data: ['data/','data/restaurants.json'],
+	sw: ['sw.js']
 };
 
 const sizes = [400, 600, 800, 1200, 1500, 2000];
@@ -78,6 +79,12 @@ gulp.task('minify-js', () => {
 		])
 });
 
+/* Copy service worker*/
+gulp.task('copy-sw', () => {
+	return gulp.src(bases.src + paths.sw[0])
+	.pipe(gulp.dest(bases.dist))
+});
+
 /* Copy JSON*/
 gulp.task('copy-data', () => {
 	return gulp.src(bases.src + paths.data[1])
@@ -90,10 +97,11 @@ gulp.task('watch', ['build'], () => {
     gulp.watch(bases.src + paths.css[1], ['minify-css']);
     gulp.watch(bases.src + paths.html[0], ['minify-html']);
     gulp.watch(bases.src + paths.data[1], ['copy-data']);
+    gulp.watch(bases.src + paths.sw[0], ['copy-sw']);
 });
 
 /* Build task */
-gulp.task('build', ['minify-js', 'minify-css', 'minify-html', 'copy-data', 'optimize-images']);
+gulp.task('build', ['minify-js', 'copy-sw', 'minify-css', 'minify-html', 'copy-data', 'optimize-images']);
 
 /* Default task */
 gulp.task('default', ['watch']);
