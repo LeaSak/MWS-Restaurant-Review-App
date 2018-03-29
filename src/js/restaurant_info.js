@@ -6,7 +6,10 @@ window.initMap = () => {
         if (error) { // Got an error!
             console.error(error);
         } else {
-            let setTitle = () => document.querySelector('#map iframe').setAttribute('title', 'Map with restaurant marker');
+            let setTitle = () => {
+                const iFrame = document.querySelector('#map iframe');
+                iFrame.setAttribute('title', 'Map with selected restaurant marker');
+            }
             self.map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 16,
                 center: restaurant.latlng,
@@ -73,7 +76,7 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
     if (restaurant.operating_hours) {
         const hourTitle = document.getElementById('hours-title');
         hourTitle.innerHTML = 'Operating Hours';
-        
+
         fillRestaurantHoursHTML();
     }
     // fill reviews
@@ -85,8 +88,8 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
  */
 const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
     const hours = document.getElementById('restaurant-hours');
-    
-        for (let key in operatingHours) {
+
+    for (let key in operatingHours) {
         const row = document.createElement('tr');
 
         const day = document.createElement('td');
@@ -132,7 +135,7 @@ const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 const createReviewHTML = (review) => {
     const li = document.createElement('li');
     li.className = 'reviews-list-item';
-    
+
     const nameBox = document.createElement('div');
     nameBox.className = 'name-container';
 

@@ -70,7 +70,11 @@ const fillCuisinesHTML = (cuisines = self.cuisines) => {
  * Initialize Google map, called from HTML.
  */
 window.initMap = () => {
-  let setTitle = () => document.querySelector('#map iframe').setAttribute('title', 'Map with markers for selected restaurants');
+  let setTitle = () => {
+    const iFrame = document.querySelector('#map iframe');
+    iFrame.setAttribute('title', 'Map with markers for selected restaurants');
+  }
+  
   let loc = {
     lat: 40.722216,
     lng: -73.987501
