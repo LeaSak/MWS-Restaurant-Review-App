@@ -22,7 +22,7 @@ First go to the master branch of the project and get a copy of the repository by
 https://github.com/LeaSak/mws-restaurant-stage-1
 ```
 
-To view the app, navigate to the project, go to the project's **dist** directory. n this folder, start up a simple HTTP server to serve up the site files on your local computer. For example, with Python: `python -m SimpleHTTPServer 8000`
+To view the app, navigate to the project, go to the project's **dist** directory. In this folder, start up a simple HTTP server to serve up the site files on your local computer. For example, with Python: `python -m SimpleHTTPServer 8000`
 
 So far it's only been tested in Google Chrome.
 
