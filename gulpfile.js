@@ -1,7 +1,6 @@
 const gulp = require('gulp'),
 	imageResize = require('gulp-image-resize'),
 	rename = require('gulp-rename'),
-	imagemin = require('gulp-imagemin'),
 	htmlmin = require('gulp-htmlmin'),
 	cssnano = require('gulp-cssnano'),
 	sourcemaps = require('gulp-sourcemaps'),
