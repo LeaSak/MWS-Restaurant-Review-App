@@ -7,6 +7,7 @@ const gulp = require('gulp'),
 	sourcemaps = require('gulp-sourcemaps'),
 	babel = require('gulp-babel'),
 	uglify = require('gulp-uglify'),
+	webp = require('gulp-webp'),
 	pump = require('pump');
 
 const bases = {
@@ -63,7 +64,7 @@ gulp.task('resize-images', resizeImageTasks);
 /* Optimize images */
 gulp.task('optimize-images', ['resize-images'], () => {
 	return gulp.src(bases.src + paths.assets[3])
-	.pipe(imagemin([imagemin.jpegtran({progressive: true, optimizationLevel: 7})]))
+	.pipe(webp())
 	.pipe(gulp.dest(bases.dist + paths.assets[0]));
 });
 
