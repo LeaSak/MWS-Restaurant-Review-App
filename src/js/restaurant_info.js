@@ -1,12 +1,11 @@
 /**
  * Initialize Google map, called from HTML.
  */
+
 window.initMap = () => {
-    fetchRestaurantFromURL((error, restaurant) => {
-        if (error) { // Got an error!
-            console.error(error);
-        } else {
-            let setTitle = () => {
+    fetchRestaurantFromURL()
+    .then((restaurant) => {
+        let setMapTitle = () => {
                 const iFrame = document.querySelector('#map iframe');
                 iFrame.setAttribute('title', 'Map with selected restaurant marker');
             }
@@ -17,33 +16,34 @@ window.initMap = () => {
             });
             fillBreadcrumb();
             DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
-            self.map.addListener('tilesloaded', setTitle);
-        }
+            self.map.addListener('tilesloaded', setMapTitle);
+    })
+    .catch(error => {
+        console.error(error);
     });
 };
-
 /**
  * Get current restaurant from page URL.
  */
-const fetchRestaurantFromURL = (callback) => {
-    if (self.restaurant) { // restaurant already fetched!
-        callback(null, self.restaurant);
-        return;
-    }
+const fetchRestaurantFromURL = () => {
     const id = getParameterByName('id');
-    if (!id) { // no id found in URL
-        let error = 'No restaurant id in URL';
-        callback(error, null);
-    } else {
-        DBHelper.fetchRestaurantById(id, (error, restaurant) => {
-            self.restaurant = restaurant;
-            if (!restaurant) {
-                console.error(error);
-                return;
-            }
-            fillRestaurantHTML();
-            callback(null, restaurant);
-        });
+    if (self.restaurant) {
+        return self.restaurant;
+    }
+    
+    else {
+        return DBHelper.fetchRestaurantById(id)
+            .then((restaurant) => {
+                self.restaurant = restaurant;
+                fillRestaurantHTML();
+                return restaurant;
+            })
+            .catch(error => {
+                if (!id || !restaurant) {
+                    console.error(error);
+                }
+            });
+
     }
 };
 
