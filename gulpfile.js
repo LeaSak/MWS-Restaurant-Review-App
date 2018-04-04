@@ -69,14 +69,12 @@ gulp.task('optimize-images', ['resize-images'], () => {
 
 /* Minify JS, sourcemaps, uglify */
 gulp.task('minify-js', () => {
-	pump([
-		gulp.src(bases.src + paths.js[1]),
-		sourcemaps.init(),
-		babel(),
-		uglify(),
-		sourcemaps.write('.'),
-		gulp.dest(bases.dist + paths.js[0])
-		]);
+	return gulp.src(bases.src + paths.js[1])
+		.pipe(sourcemaps.init())
+		.pipe(babel())
+		.pipe(uglify())
+		.pipe(sourcemaps.write('.'))
+		.pipe(gulp.dest(bases.dist + paths.js[0]));
 });
 
 /* Copy service worker*/
