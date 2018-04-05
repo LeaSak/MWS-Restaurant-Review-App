@@ -70,11 +70,6 @@ const fillCuisinesHTML = (cuisines = self.cuisines) => {
  * Initialize Google map, called from HTML.
  */
 window.initMap = () => {
-  let setTitle = () => {
-    const iFrame = document.querySelector('#map iframe');
-    iFrame.setAttribute('title', 'Map with markers for selected restaurants');
-  }
-  
   let loc = {
     lat: 40.722216,
     lng: -73.987501
@@ -84,7 +79,13 @@ window.initMap = () => {
     center: loc,
     scrollwheel: false
   });
+  
   updateRestaurants();
+
+  let setTitle = () => {
+    const iFrame = document.querySelector('#map iframe');
+    iFrame.setAttribute('title', 'Map with markers for selected restaurants');
+  }
   self.map.addListener('tilesloaded', setTitle);
 };
 
@@ -118,7 +119,7 @@ const resetRestaurants = (restaurants) => {
   // Remove all restaurants
   self.restaurants = [];
   const ul = document.getElementById('restaurants-list');
-  ul.innerHTML = '';
+  ul.textContent = '';
 
   // Remove all map markers
   self.markers.forEach(m => m.setMap(null));
@@ -161,23 +162,23 @@ const createRestaurantHTML = (restaurant) => {
   li.append(contentBox);
 
   const name = document.createElement('h3');
-  name.innerHTML = restaurant.name;
+  name.textContent = restaurant.name;
   name.className = 'restaurant-list-heading';
   contentBox.append(name);
 
   const neighborhood = document.createElement('p');
-  neighborhood.innerHTML = restaurant.neighborhood;
+  neighborhood.textContent = restaurant.neighborhood;
   neighborhood.className = 'neighborhood';
   contentBox.append(neighborhood);
 
   const address = document.createElement('p');
-  address.innerHTML = restaurant.address;
+  address.textContent = restaurant.address;
   address.className = 'address';
   contentBox.append(address);
 
   const more = document.createElement('a');
   more.className = 'restaurant-link';
-  more.innerHTML = 'View Venue';
+  more.textContent = 'View Venue';
   more.href = DBHelper.urlForRestaurant(restaurant);
   contentBox.append(more);
 

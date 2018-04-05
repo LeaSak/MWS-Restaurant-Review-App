@@ -5,18 +5,21 @@
 window.initMap = () => {
     fetchRestaurantFromURL()
     .then((restaurant) => {
-        let setMapTitle = () => {
-                const iFrame = document.querySelector('#map iframe');
-                iFrame.setAttribute('title', 'Map with selected restaurant marker');
-            }
             self.map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 16,
                 center: restaurant.latlng,
                 scrollwheel: false
             });
+            
             fillBreadcrumb();
+            
             DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
-            self.map.addListener('tilesloaded', setMapTitle);
+            
+            let setTitle = () => {
+                const iFrame = document.querySelector('#map iframe');
+                iFrame.setAttribute('title', 'Map with selected restaurant marker');
+            }
+            self.map.addListener('tilesloaded', setTitle);
     })
     .catch(error => {
         console.error(error);
@@ -52,13 +55,13 @@ const fetchRestaurantFromURL = () => {
  */
 const fillRestaurantHTML = (restaurant = self.restaurant) => {
     const name = document.getElementById('restaurant-name');
-    name.innerHTML = restaurant.name;
+    name.textContent = restaurant.name;
 
     const addressTitle = document.getElementById('address-title');
-    addressTitle.innerHTML = 'Address';
+    addressTitle.textContent = 'Address';
 
     const address = document.getElementById('restaurant-address');
-    address.innerHTML = restaurant.address;
+    address.textContent = restaurant.address;
 
     const image = document.getElementById('restaurant-img');
     image.src = DBHelper.imageUrlForRestaurant(restaurant);
@@ -67,15 +70,15 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
     image.srcset = DBHelper.srcsetForRestaurant(restaurant);
 
     const cuisineTitle = document.getElementById('cuisine-title');
-    cuisineTitle.innerHTML = 'Cuisine';
+    cuisineTitle.textContent = 'Cuisine';
 
     const cuisine = document.getElementById('restaurant-cuisine');
-    cuisine.innerHTML = restaurant.cuisine_type;
+    cuisine.textContent = restaurant.cuisine_type;
 
     // fill operating hours
     if (restaurant.operating_hours) {
         const hourTitle = document.getElementById('hours-title');
-        hourTitle.innerHTML = 'Operating Hours';
+        hourTitle.textContent = 'Operating Hours';
 
         fillRestaurantHoursHTML();
     }
@@ -113,12 +116,12 @@ const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     const container = document.getElementById('reviews-container');
     const title = document.createElement('h2');
     title.className = 'review-section-title';
-    title.innerHTML = 'Reviews';
+    title.textContent = 'Reviews';
     container.appendChild(title);
 
     if (!reviews) {
         const noReviews = document.createElement('p');
-        noReviews.innerHTML = 'No reviews yet!';
+        noReviews.textContent = 'No reviews yet!';
         container.appendChild(noReviews);
         return;
     }
@@ -140,22 +143,22 @@ const createReviewHTML = (review) => {
     nameBox.className = 'name-container';
 
     const name = document.createElement('p');
-    name.innerHTML = review.name;
+    name.textContent = review.name;
     li.appendChild(nameBox);
     nameBox.appendChild(name);
 
     const date = document.createElement('p');
-    date.innerHTML = review.date;
+    date.textContent = review.date;
     date.className = 'review-date';
     nameBox.appendChild(date);
 
     const rating = document.createElement('p');
-    rating.innerHTML = `Rating: ${review.rating}`;
+    rating.textContent = `Rating: ${review.rating}`;
     rating.className = 'rating';
     li.appendChild(rating);
 
     const comments = document.createElement('p');
-    comments.innerHTML = review.comments;
+    comments.textContent = review.comments;
     comments.className = 'comments';
     li.appendChild(comments);
 
