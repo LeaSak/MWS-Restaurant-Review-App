@@ -96,12 +96,12 @@ const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hour
         const row = document.createElement('tr');
 
         const day = document.createElement('td');
-        day.innerHTML = key;
+        day.textContent = key;
         day.className = 'day';
         row.appendChild(day);
 
         const time = document.createElement('td');
-        time.innerHTML = operatingHours[key];
+        time.textContent = operatingHours[key];
         time.className = 'time';
         row.appendChild(time);
 
@@ -171,7 +171,7 @@ const createReviewHTML = (review) => {
 const fillBreadcrumb = (restaurant = self.restaurant) => {
     const breadcrumb = document.getElementById('breadcrumb');
     const li = document.createElement('li');
-    li.innerHTML = restaurant.name;
+    li.textContent = restaurant.name;
     breadcrumb.appendChild(li);
 };
 
