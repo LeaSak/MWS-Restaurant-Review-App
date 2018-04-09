@@ -20,9 +20,7 @@ const fetchNeighborhoods = () => {
     self.neighborhoods = neighborhoods;
     fillNeighborhoodsHTML();
   })
-  .catch(error => {
-    console.error(error);
-  });
+  .catch(DBHelper.logError);
 };
 
 /**
@@ -32,7 +30,7 @@ const fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
   const select = document.getElementById('neighborhoods-select');
   neighborhoods.forEach(neighborhood => {
     const option = document.createElement('option');
-    option.innerHTML = neighborhood;
+    option.textContent = neighborhood;
     option.value = neighborhood;
     select.append(option);
   });
@@ -47,9 +45,7 @@ const fetchCuisines = () => {
       self.cuisines = cuisines;
       fillCuisinesHTML();
   })
-  .catch(error => {
-    console.error(error);
-  });
+  .catch(DBHelper.logError);
 };
 
 /**
@@ -60,7 +56,7 @@ const fillCuisinesHTML = (cuisines = self.cuisines) => {
 
   cuisines.forEach(cuisine => {
     const option = document.createElement('option');
-    option.innerHTML = cuisine;
+    option.textContent = cuisine;
     option.value = cuisine;
     select.append(option);
   });
@@ -107,9 +103,7 @@ const updateRestaurants = () => {
     resetRestaurants(restaurants);
     fillRestaurantsHTML();
   })
-  .catch(error => {
-    console.error(error);
-  });
+  .catch(DBHelper.logError);
 };
 
 /**
@@ -141,6 +135,8 @@ const fillRestaurantsHTML = (restaurants = self.restaurants) => {
 /**
  * Create restaurant HTML.
  */
+
+ // TOD0: Template this
 const createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
   li.className = 'restaurant-list-item';

@@ -27,27 +27,20 @@ window.initMap = () => {
 };
 /**
  * Get current restaurant from page URL.
+ * Error handling is in window.initMap()
  */
 const fetchRestaurantFromURL = () => {
-    const id = getParameterByName('id');
     if (self.restaurant) {
         return self.restaurant;
     }
-    
-    else {
-        return DBHelper.fetchRestaurantById(id)
-            .then((restaurant) => {
+
+    const id = getParameterByName('id');
+    return DBHelper.fetchRestaurantById(id)
+        .then((restaurant) => {
                 self.restaurant = restaurant;
                 fillRestaurantHTML();
                 return restaurant;
-            })
-            .catch(error => {
-                if (!id || !restaurant) {
-                    console.error(error);
-                }
-            });
-
-    }
+    })
 };
 
 /**
@@ -89,6 +82,7 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
 /**
  * Create restaurant operating hours HTML table and add it to the webpage.
  */
+ // TOD0: Template
 const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
     const hours = document.getElementById('restaurant-hours');
 
@@ -112,6 +106,7 @@ const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hour
 /**
  * Create all reviews HTML and add them to the webpage.
  */
+ // TOD0: Template
 const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     const container = document.getElementById('reviews-container');
     const title = document.createElement('h2');
@@ -135,6 +130,8 @@ const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 /**
  * Create review HTML and add it to the webpage.
  */
+
+// TOD0: Template
 const createReviewHTML = (review) => {
     const li = document.createElement('li');
     li.className = 'reviews-list-item';
@@ -168,6 +165,8 @@ const createReviewHTML = (review) => {
 /**
  * Add restaurant name to the breadcrumb navigation menu
  */
+
+ // TOD0: Template
 const fillBreadcrumb = (restaurant = self.restaurant) => {
     const breadcrumb = document.getElementById('breadcrumb');
     const li = document.createElement('li');
