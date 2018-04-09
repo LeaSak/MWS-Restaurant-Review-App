@@ -82,7 +82,6 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
 /**
  * Create restaurant operating hours HTML table and add it to the webpage.
  */
- // TOD0: Template
 const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
     const hours = document.getElementById('restaurant-hours');
 
@@ -106,7 +105,6 @@ const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hour
 /**
  * Create all reviews HTML and add them to the webpage.
  */
- // TOD0: Template
 const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     const container = document.getElementById('reviews-container');
     const title = document.createElement('h2');
@@ -121,52 +119,30 @@ const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
         return;
     }
     const ul = document.getElementById('reviews-list');
-    reviews.forEach(review => {
-        ul.appendChild(createReviewHTML(review));
-    });
+    ul.innerHTML = reviews.map(review => createReviewHTML(review)).join('');
     container.appendChild(ul);
 };
 
 /**
  * Create review HTML and add it to the webpage.
  */
-
-// TOD0: Template
 const createReviewHTML = (review) => {
-    const li = document.createElement('li');
-    li.className = 'reviews-list-item';
-
-    const nameBox = document.createElement('div');
-    nameBox.className = 'name-container';
-
-    const name = document.createElement('p');
-    name.textContent = review.name;
-    li.appendChild(nameBox);
-    nameBox.appendChild(name);
-
-    const date = document.createElement('p');
-    date.textContent = review.date;
-    date.className = 'review-date';
-    nameBox.appendChild(date);
-
-    const rating = document.createElement('p');
-    rating.textContent = `Rating: ${review.rating}`;
-    rating.className = 'rating';
-    li.appendChild(rating);
-
-    const comments = document.createElement('p');
-    comments.textContent = review.comments;
-    comments.className = 'comments';
-    li.appendChild(comments);
-
-    return li;
+    const reviewHTML = 
+    `<li class="reviews-list-item">
+        <div class="name-container">
+            <p>${review.name}</p>
+            <p class="review-date">${review.date}</p>
+        </div>
+        <p class="rating">Rating: ${review.rating}</p>
+        <p class="comments">${review.comments}</p>
+    </li>`;
+    return reviewHTML;
 };
 
 /**
  * Add restaurant name to the breadcrumb navigation menu
  */
 
- // TOD0: Template
 const fillBreadcrumb = (restaurant = self.restaurant) => {
     const breadcrumb = document.getElementById('breadcrumb');
     const li = document.createElement('li');
