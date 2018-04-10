@@ -25,17 +25,17 @@ if ('serviceWorker' in navigator) {
 }
 
 // Cache static assets on install
-/*self.addEventListener('install', (event) => {
+self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
             return cache.addAll(STATIC_ASSETS);
         }));
-});*/
+});
 
 // https://jakearchibald.com/2014/offline-cookbook/#on-network-response
 // If the request is in the cache, return it
 // else go to the network, cache the response and return it
-/*self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.open(CACHE_NAME).then((cache) => {
             return cache.match(event.request).then((response) => {
@@ -46,4 +46,4 @@ if ('serviceWorker' in navigator) {
             });
         })
     );
-});*/
+});
