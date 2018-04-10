@@ -7,6 +7,8 @@ const STATIC_ASSETS = [
     'js/dbhelper.js',
     'js/main.js',
     'js/restaurant_info.js',
+    'js/index.js',
+    'lib/idb.js',
     'https://fonts.googleapis.com/css?family=Work+Sans:400,500" rel="stylesheet'
 ];
 
