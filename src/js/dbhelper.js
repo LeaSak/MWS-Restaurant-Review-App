@@ -4,6 +4,54 @@
 
 class DBHelper {
 
+    static createDatabase() {
+        const idbPromise = idb.open('restaurants', 2, (upgradeDb) => {
+            switch (upgradeDb.oldVersion) {
+                case 0:
+                    // a placeholder case so that the switch block will
+                    // execute when the database is first created
+                    // (oldVersion is 0)
+                case 1:
+                    console.log('Creating the restaurants object store');
+                    upgradeDb.createObjectStore('restaurants', { keyPath: 'id' });
+            }
+        })
+        
+        return idbPromise;
+    }
+
+    static addRestaurantsToDB(restaurants){
+        return DBHelper.createDatabase()
+        .then((db) => {
+            if (!db) {
+                    return;
+                }
+                const tx = db.transaction('restaurants', 'readwrite');
+                const store = tx.objectStore('restaurants');
+
+                return Promise.all(restaurants.map(restaurant => {
+                    console.log('adding restaurants to database');
+                    return store.put(restaurant);
+                }));
+        })
+        .catch((error) => {
+                tx.abort();
+                console.error(error);
+            });
+
+    }
+
+    static fetchRestaurantsFromDB(){
+        return DBHelper.createDatabase()
+        .then((db) => {
+            const tx = db.transaction('restaurants', 'readonly');
+            const store = tx.objectStore('restaurants');
+            console.log('fetching restaurants from database');
+            return store.getAll();
+        });
+    }
+
+
     /**
      * Database URL.
      * Change this to restaurants.json file location on your server.
@@ -37,27 +85,31 @@ class DBHelper {
      * Returns dynamic request results
      * 
      */
-    
+
     static fetchRestaurants() {
         console.log('calling fetchRestaurants');
         // First try to get results from Database
-        return idbApp.fetchRestaurantsFromDB()
-        .then(function(response){
-            // If the database is empty
-            // Go to the network
-            // Add network response to IndexedDB
-            if (response.length === 0){
-                return fetch(DBHelper.DATABASE_URL)
-                .then(DBHelper.validateJSON)
-                .then(DBHelper.defineRestaurants)
-                .then(function(response){
-                    idbApp.addRestaurants(response);
-                    return response;
-                })
-                .catch(DBHelper.logError);
-            }
-            return response;
-        });
+        return DBHelper.fetchRestaurantsFromDB()
+            .then(function(response) {
+                // If the database is empty
+                // Go to the network
+                // Add network response to IndexedDB
+                if (response.length === 0) {
+                    return DBHelper.fetchRestaurantsFromNetwork()
+                    .then(response => {
+                        DBHelper.addRestaurantsToDB(response);
+                        return response;
+                    })
+                    .catch(DBHelper.logError);
+                }
+                return response;
+            });
+    }
+
+    static fetchRestaurantsFromNetwork(){
+        return fetch(DBHelper.DATABASE_URL)
+        .then(DBHelper.validateJSON)
+        .then(DBHelper.defineRestaurants);
     }
 
     /**
