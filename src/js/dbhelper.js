@@ -30,15 +30,35 @@ class DBHelper {
     }
 
     /**
-     * Retch Restaurants without error handling
+     * Fetch Restaurants without error handling
      * Error Handling is in other functions
+     * Fetches restaurants from server
+     * Adds them to the database
+     * Returns dynamic request results
+     * 
      */
+    
     static fetchRestaurants() {
-        return fetch(DBHelper.DATABASE_URL)
-            .then(DBHelper.validateJSON)
-            .then(DBHelper.defineRestaurants);
+        console.log('calling fetchRestaurants');
+        // First try to get results from Database
+        return idbApp.fetchRestaurantsFromDB()
+        .then(function(response){
+            // If the database is empty
+            // Go to the network
+            // Add network response to IndexedDB
+            if (response.length === 0){
+                return fetch(DBHelper.DATABASE_URL)
+                .then(DBHelper.validateJSON)
+                .then(DBHelper.defineRestaurants)
+                .then(function(response){
+                    idbApp.addRestaurants(response);
+                    return response;
+                })
+                .catch(DBHelper.logError);
+            }
+            return response;
+        });
     }
-
 
     /**
      * Fetch a restaurant by its ID.

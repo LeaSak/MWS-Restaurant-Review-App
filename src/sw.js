@@ -12,7 +12,6 @@ const STATIC_ASSETS = [
     'https://fonts.googleapis.com/css?family=Work+Sans:400,500" rel="stylesheet'
 ];
 
-
 // Check for service worker and do sw registration
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -49,3 +48,5 @@ self.addEventListener('fetch', (event) => {
         })
     );
 });
+
+console.log(self, navigator);

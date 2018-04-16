@@ -96,6 +96,8 @@ gulp.task('watch', ['build'], () => {
     gulp.watch(bases.src + paths.css[1], ['minify-css']);
     gulp.watch(bases.src + paths.html[0], ['minify-html']);
     gulp.watch(bases.src + paths.sw[0], ['copy-sw']);
+    gulp.watch(bases.src + paths.vendor[1], ['copy-lib']);
+
 });
 
 /* Build task */

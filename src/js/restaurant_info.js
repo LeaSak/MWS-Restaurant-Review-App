@@ -3,7 +3,7 @@
  */
 
 window.initMap = () => {
-    fetchRestaurantFromURL()
+    return fetchRestaurantFromURL()
     .then((restaurant) => {
             self.map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 16,
