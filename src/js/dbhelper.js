@@ -4,6 +4,9 @@
 
 class DBHelper {
 
+    /**
+     * Make an IndexedDB Database
+     */
     static createDatabase() {
         const idbPromise = idb.open('restaurants', 2, (upgradeDb) => {
             switch (upgradeDb.oldVersion) {
@@ -20,6 +23,9 @@ class DBHelper {
         return idbPromise;
     }
 
+    /**
+     * Add restaurants to the database
+     */
     static addRestaurantsToDB(restaurants){
         return DBHelper.createDatabase()
         .then((db) => {
@@ -41,6 +47,9 @@ class DBHelper {
 
     }
 
+    /**
+     * Get all restaurants from the database
+     */
     static fetchRestaurantsFromDB(){
         return DBHelper.createDatabase()
         .then((db) => {
@@ -77,6 +86,16 @@ class DBHelper {
         return restaurants;
     }
 
+
+    /**
+     * Go to network to get restaurants
+     */
+    static fetchRestaurantsFromNetwork(){
+        return fetch(DBHelper.DATABASE_URL)
+        .then(DBHelper.validateJSON)
+        .then(DBHelper.defineRestaurants);
+    }
+
     /**
      * Fetch Restaurants without error handling
      * Error Handling is in other functions
@@ -104,12 +123,6 @@ class DBHelper {
                 }
                 return response;
             });
-    }
-
-    static fetchRestaurantsFromNetwork(){
-        return fetch(DBHelper.DATABASE_URL)
-        .then(DBHelper.validateJSON)
-        .then(DBHelper.defineRestaurants);
     }
 
     /**

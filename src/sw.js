@@ -1,4 +1,5 @@
 const CACHE_NAME = 'restaurant-app-v1';
+const CACHE_IMAGES = 'restaurant-app-images-v1';
 
 const STATIC_ASSETS = [
     '/',
@@ -32,10 +33,29 @@ self.addEventListener('install', (event) => {
         }));
 });
 
-// https://jakearchibald.com/2014/offline-cookbook/#on-network-response
-// If the request is in the cache, return it
-// else go to the network, cache the response and return it
+
 self.addEventListener('fetch', (event) => {
+    const requestUrl = new URL(event.request.url);
+
+    if (requestUrl.origin === location.origin) {
+
+        // index.html
+        if (requestUrl.pathname === '/') {
+            event.respondWith(caches.match('/'));
+            return;
+        }
+
+        // add images to photo cache
+        if (requestUrl.pathname.startsWith('/img/')) {
+            event.respondWith(servePhoto(event.request));
+            return;
+        }
+    }
+
+    // cache default method
+    // https://jakearchibald.com/2014/offline-cookbook/#on-network-response
+    // If the request is in the cache, return it
+    // else go to the network, cache the response and return it at the same time
     event.respondWith(
         caches.open(CACHE_NAME).then((cache) => {
             return cache.match(event.request).then((response) => {
@@ -47,3 +67,19 @@ self.addEventListener('fetch', (event) => {
         })
     );
 });
+
+
+function servePhoto(request) {
+    var storageUrl = request.url.replace(/-\d+\.webp$/, '');
+
+    return caches.open(CACHE_IMAGES).then(function(cache) {
+        return cache.match(storageUrl).then(function(response) {
+            if (response) return response;
+
+            return fetch(request).then(function(networkResponse) {
+                cache.put(storageUrl, networkResponse.clone());
+                return networkResponse;
+            });
+        });
+    });
+}
