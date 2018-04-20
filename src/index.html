@@ -52,11 +52,16 @@
     </footer>
     
     <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/8.7.1/lazyload.min.js"></script>
     <script src="lib/idb.js"></script>
     <script src="js/dbhelper.js"></script>
     <script src="js/main.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSQXjgi1K6hqDS4W3nWVK_z0lntlbLFPo&libraries=places&callback=initMap"></script>
     <script src="sw.js"></script>
+    <script>window.myLazyLoad = new LazyLoad({
+        data_src: "src",
+        data_srcset: "srcset"
+    });</script>
 </body>
 
 </html>

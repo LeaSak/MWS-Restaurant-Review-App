@@ -46,7 +46,7 @@ self.addEventListener('fetch', (event) => {
         }
 
         // add images to photo cache
-        if (requestUrl.pathname.startsWith('/img/')) {
+        if (requestUrl.pathname.endsWith('.webp')) {
             event.respondWith(servePhoto(event.request));
             return;
         }
@@ -57,9 +57,9 @@ self.addEventListener('fetch', (event) => {
     // If the request is in the cache, return it
     // else go to the network, cache the response and return it at the same time
     event.respondWith(
-        caches.open(CACHE_NAME).then((cache) => {
-            return cache.match(event.request).then((response) => {
-                return response || fetch(event.request).then((response) => {
+        caches.open(CACHE_NAME).then(cache => {
+            return cache.match(event.request).then(response => {
+                return response || fetch(event.request).then(response => {
                     cache.put(event.request, response.clone());
                     return response;
                 });
@@ -72,11 +72,11 @@ self.addEventListener('fetch', (event) => {
 function servePhoto(request) {
     var storageUrl = request.url.replace(/-\d+\.webp$/, '');
 
-    return caches.open(CACHE_IMAGES).then(function(cache) {
-        return cache.match(storageUrl).then(function(response) {
+    return caches.open(CACHE_IMAGES).then(cache => {
+        return cache.match(storageUrl).then(response => {
             if (response) return response;
 
-            return fetch(request).then(function(networkResponse) {
+            return fetch(request).then(networkResponse => {
                 cache.put(storageUrl, networkResponse.clone());
                 return networkResponse;
             });

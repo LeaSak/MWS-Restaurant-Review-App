@@ -127,22 +127,21 @@ const fillRestaurantsHTML = (restaurants = self.restaurants) => {
     const ul = document.getElementById('restaurants-list');
     ul.innerHTML = restaurants.map(restaurant => createRestaurantHTML(restaurant)).join('');
     addMarkersToMap();
+    myLazyLoad.update();
 };
 
 /**
  * Create restaurant HTML.
  */
-
-// TOD0: Template this
 const createRestaurantHTML = (restaurant) => {
 
     const restaurantHTML =
         `<li class="restaurant-list-item">
         <div class="flex-card-img">
             <img class="restaurant-img" 
-            src="${DBHelper.imageUrlForRestaurant(restaurant)}" 
+            data-src="${DBHelper.imageUrlForRestaurant(restaurant)}" 
             sizes="(min-width: 600px) 50vw, (min-width: 960px) 33.33vw, 100vw"
-            srcset="${DBHelper.srcsetForRestaurant(restaurant)}" 
+            data-srcset="${DBHelper.srcsetForRestaurant(restaurant)}" 
             alt="${restaurant.alt}">
         </div>
         <div class="flex-card-content">
