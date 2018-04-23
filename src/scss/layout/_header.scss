@@ -1,0 +1,21 @@
+/*Common styles*/
+.primary-nav {
+    background-color: #ecebe9;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    min-height: 4.5rem;
+}
+
+.header-title {
+    font-size: 1.313em;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.header-link {
+    color: #121212;
+}
+
+.header-link:hover,
+.header-link:focus {
+    text-decoration: none;
+}

@@ -1,0 +1,37 @@
+html {
+    box-sizing: border-box;
+    font-size: 100%;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+body {
+    background-color: #ecebe9;
+    position: relative;
+    font-family: Work Sans, Helvetica, sans-serif;
+    font-weight: 400;
+    font-size: 1em;
+    color: #121212;
+    line-height: 1.5;
+    margin: 0;
+}
+
+article,
+aside,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+    width: 100%;
+}

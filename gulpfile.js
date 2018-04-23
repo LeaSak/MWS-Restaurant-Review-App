@@ -2,7 +2,10 @@ const gulp = require('gulp'),
 	imageResize = require('gulp-image-resize'),
 	rename = require('gulp-rename'),
 	htmlmin = require('gulp-htmlmin'),
-	cssnano = require('gulp-cssnano'),
+	sass = require('gulp-sass'),
+	autoprefixer = require('autoprefixer'),
+	cssnano = require('cssnano'),
+	postcss = require('gulp-postcss'),
 	sourcemaps = require('gulp-sourcemaps'),
 	babel = require('gulp-babel'),
 	uglify = require('gulp-uglify'),
@@ -16,7 +19,8 @@ const bases = {
 
 const paths = {
 	html: ['*.html','index.html', 'restaurants.html'],
-	css: ['css/','css/styles.css'],
+	sass: ['scss/', 'scss/**/*.scss', 'scss/app-main.scss', 'scss/app-restaurant.scss', 'scss/app-600.scss'],
+	css: ['css/','css/**/*.css'],
 	js: ['js/','js/**/*.js','js/dbhelper.js', 'js/main.js', 'js/restaurant_info.js'],
 	assets: ['img/','img/*.jpg','img/tmp/','img/tmp/**/*.jpg'],
 	vendor: ['lib/', 'lib/**/*.js'],
@@ -35,13 +39,21 @@ gulp.task('minify-html', () => {
 		.pipe(gulp.dest(bases.dist));
 });
 
-/* Minify CSS */
-gulp.task('minify-css', () => {
-	return gulp.src(bases.src + paths.css[1])
-		.pipe(sourcemaps.init())
-		.pipe(cssnano())
-		.pipe(sourcemaps.write('.'))
-		.pipe(gulp.dest(bases.dist + paths.css[0]));
+// Look here for sass gulp task setup: https://www.npmjs.com/package/node-normalize-scss
+gulp.task('sass', function () {
+	var plugins = [
+		autoprefixer({browsers:['last 2 versions'], cascade: false}),
+		cssnano()
+	];
+  return gulp.src([bases.src + paths.sass[1]])
+  	.pipe(sourcemaps.init())
+    .pipe(sass({
+    	outputStyle: 'expanded',
+    	includePaths: require('node-normalize-scss').includePaths
+    }).on('error', sass.logError))
+    .pipe(postcss(plugins))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest(bases.dist + paths.css[0]));
 });
 
 /* Make responsive images*/
@@ -93,7 +105,7 @@ gulp.task('copy-lib', () => {
 /* Watch */
 gulp.task('watch', ['build'], () => {
     gulp.watch(bases.src + paths.js[1], ['minify-js']);
-    gulp.watch(bases.src + paths.css[1], ['minify-css']);
+    gulp.watch(bases.src + paths.sass[1], ['sass']);
     gulp.watch(bases.src + paths.html[0], ['minify-html']);
     gulp.watch(bases.src + paths.sw[0], ['copy-sw']);
     gulp.watch(bases.src + paths.vendor[1], ['copy-lib']);
@@ -101,7 +113,7 @@ gulp.task('watch', ['build'], () => {
 });
 
 /* Build task */
-gulp.task('build', ['minify-js', 'copy-sw', 'copy-lib', 'minify-css', 'minify-html', 'optimize-images']);
+gulp.task('build', ['minify-js', 'copy-sw', 'copy-lib', 'sass', 'minify-html', 'optimize-images']);
 
 /* Default task */
 gulp.task('default', ['watch']);
