@@ -4,9 +4,9 @@ const CACHE_IMAGES = 'restaurant-app-images-v1';
 const STATIC_ASSETS = [
     '/',
     'restaurant.html',
+    'css/app-600.css',
     'css/app-main.css',
     'css/app-restaurant.css',
-    'css/app-600.css',
     'js/dbhelper.js',
     'js/main.js',
     'js/restaurant_info.js',

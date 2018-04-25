@@ -33,7 +33,7 @@ const resizeImageTasks = [];
 
 
 /* Minify HTML files*/
-gulp.task('minify-html', () => {
+gulp.task('minify:html', () => {
 	return gulp.src(bases.src + paths.html[0])
 	.pipe(htmlmin({collapseWhitespace: true}))
 		.pipe(gulp.dest(bases.dist));
@@ -73,14 +73,14 @@ sizes.forEach((size) => {
 gulp.task('resize-images', resizeImageTasks);
 
 /* Optimize images */
-gulp.task('optimize-images', ['resize-images'], () => {
+gulp.task('webp', ['resize-images'], () => {
 	return gulp.src(bases.src + paths.assets[3])
 	.pipe(webp())
 	.pipe(gulp.dest(bases.dist + paths.assets[0]));
 });
 
 /* Minify JS, sourcemaps, uglify */
-gulp.task('minify-js', () => {
+gulp.task('minify:js', () => {
 	return gulp.src(bases.src + paths.js[1])
 		.pipe(sourcemaps.init())
 		.pipe(babel())
@@ -90,30 +90,28 @@ gulp.task('minify-js', () => {
 });
 
 /* Copy service worker*/
-gulp.task('copy-sw', () => {
+gulp.task('copy:sw', () => {
 	return gulp.src(bases.src + paths.sw[0])
 	.pipe(gulp.dest(bases.dist));
 });
 
-/* Copy service worker*/
-gulp.task('copy-lib', () => {
+gulp.task('copy:vendor', () => {
 	return gulp.src(bases.src + paths.vendor[1])
 	.pipe(gulp.dest(bases.dist + paths.vendor[0]));
 });
 
-
 /* Watch */
 gulp.task('watch', ['build'], () => {
-    gulp.watch(bases.src + paths.js[1], ['minify-js']);
+    gulp.watch(bases.src + paths.js[1], ['minify:js']);
     gulp.watch(bases.src + paths.sass[1], ['sass']);
-    gulp.watch(bases.src + paths.html[0], ['minify-html']);
-    gulp.watch(bases.src + paths.sw[0], ['copy-sw']);
-    gulp.watch(bases.src + paths.vendor[1], ['copy-lib']);
+    gulp.watch(bases.src + paths.html[0], ['minify:html']);
+    gulp.watch(bases.src + paths.sw[0], ['copy:sw']);
+    gulp.watch(bases.src + paths.vendor[1], ['copy:vendor']);
 
 });
 
 /* Build task */
-gulp.task('build', ['minify-js', 'copy-sw', 'copy-lib', 'sass', 'minify-html', 'optimize-images']);
+gulp.task('build', ['minify:js', 'copy:sw', 'copy:vendor', 'sass', 'minify:html', 'webp']);
 
 /* Default task */
 gulp.task('default', ['watch']);
