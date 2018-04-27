@@ -2,11 +2,16 @@
 <html lang="en">
 
 <head>
-    <!-- <link href="https://fonts.googleapis.com/css?family=Work+Sans:400,500" rel="stylesheet"> -->
-    <link rel="stylesheet" type="text/css" href="css/app-main.css">
-    <link rel="stylesheet" type="text/css" href="css/app-600.css" media="(min-width:600px)">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Restaurant Reviews</title>
+    <!-- Preload resources -->
+    <!-- <link rel="preload" href="css/app-main.css" as="style">
+    <link rel="preload" href="css/app-600.css" media="(min-width:600px)" as="style">
+    <link rel="preload" src="js/vendor/idb.js" as="script"></link>
+    <link rel="preload" src="js/dbhelper.js" as="script"></link>
+    <link rel="preload" src="js/main.js" as="script"></link> -->
+    <link rel="stylesheet" href="css/app-main.css">
+    <link rel="stylesheet" href="css/app-600.css" media="(min-width:600px)">
 </head>
 
 <body>
@@ -52,14 +57,12 @@
     </footer>
     
     <!-- Scripts -->
-    <script src="lib/lazysizes.min.js"></script>
-    <script src="lib/idb.js"></script>
+    <script src="js/vendor/idb.min.js"></script>
     <script src="js/dbhelper.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/vendor/lazysizes.min.js" async=""></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSQXjgi1K6hqDS4W3nWVK_z0lntlbLFPo&libraries=places&callback=initMap"></script>
     <script src="sw.js"></script>
-    <!-- <script>window.myLazyLoad = new LazyLoad({
-    });</script> -->
 </body>
 
 </html>

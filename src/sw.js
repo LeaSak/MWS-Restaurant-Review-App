@@ -10,8 +10,8 @@ const STATIC_ASSETS = [
     'js/dbhelper.js',
     'js/main.js',
     'js/restaurant_info.js',
-    'lib/idb.js',
-    'https://fonts.googleapis.com/css?family=Work+Sans:400,500" rel="stylesheet'
+    'js/vendor/idb.min.js',
+    'js/vendor/lazysizes.min.js'
 ];
 
 // Check for service worker and do sw registration

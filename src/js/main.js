@@ -127,7 +127,6 @@ const fillRestaurantsHTML = (restaurants = self.restaurants) => {
     const ul = document.getElementById('restaurants-list');
     ul.innerHTML = restaurants.map(restaurant => createRestaurantHTML(restaurant)).join('');
     addMarkersToMap();
-    //myLazyLoad.update();
 };
 
 /**
@@ -137,13 +136,12 @@ const createRestaurantHTML = (restaurant) => {
 
     const restaurantHTML =
         `<li class="restaurant-list-item">
-        <div class="flex-card-img">
+        <picture class="flex-card-img">
+            <source data-srcset="${DBHelper.srcsetForRestaurant(restaurant)}" 
+            class="restaurant-img lazyload" data-sizes="auto" type="image/webp">
             <img class="restaurant-img lazyload" 
-            data-src="${DBHelper.imageUrlForRestaurant(restaurant)}" 
-            data-sizes="auto"
-            data-srcset="${DBHelper.srcsetForRestaurant(restaurant)}" 
-            alt="${restaurant.name}">
-        </div>
+            data-src="${DBHelper.imageUrlForRestaurant(restaurant)}" alt="Photo of ${restaurant.name}">
+        </picture>
         <div class="flex-card-content">
             <h3 class="restaurant-list-heading">${restaurant.name}</h3>
             <p class="neighborhood">${restaurant.neighborhood}</p>

@@ -1,120 +1,137 @@
 const gulp = require('gulp'),
-	imageResize = require('gulp-image-resize'),
-	rename = require('gulp-rename'),
-	htmlmin = require('gulp-htmlmin'),
-	sass = require('gulp-sass'),
-	autoprefixer = require('autoprefixer'),
-	cssnano = require('cssnano'),
-	postcss = require('gulp-postcss'),
-	sourcemaps = require('gulp-sourcemaps'),
-	babel = require('gulp-babel'),
-	uglify = require('gulp-uglify'),
-	webp = require('gulp-webp'),
-	pump = require('pump');
+    imageResize = require('gulp-image-resize'),
+    rename = require('gulp-rename'),
+    htmlmin = require('gulp-htmlmin'),
+    sass = require('gulp-sass'),
+    autoprefixer = require('autoprefixer'),
+    cssnano = require('cssnano'),
+    postcss = require('gulp-postcss'),
+    sourcemaps = require('gulp-sourcemaps'),
+    babel = require('gulp-babel'),
+    uglify = require('gulp-uglify'),
+    concat = require('gulp-concat'),
+    webp = require('gulp-webp'),
+    responsive = require('gulp-responsive'),
+    pump = require('pump');
 
 const bases = {
-	src: 'src/',
-	dist: 'dist/'
+    src: 'src/',
+    dist: 'dist/'
 };
 
 const paths = {
-	html: ['*.html','index.html', 'restaurants.html'],
-	sass: ['scss/', 'scss/**/*.scss', 'scss/app-main.scss', 'scss/app-restaurant.scss', 'scss/app-600.scss'],
-	css: ['css/','css/**/*.css'],
-	js: ['js/','js/**/*.js','js/dbhelper.js', 'js/main.js', 'js/restaurant_info.js'],
-	assets: ['img/','img/*.jpg','img/tmp/','img/tmp/**/*.jpg'],
-	vendor: ['lib/', 'lib/**/*.js'],
-	sw: ['sw.js']
+    html: ['**/*.html', 'index.html', 'restaurants.html'],
+    sass: ['scss/', 'scss/**/*.scss'],
+    css: ['css/', 'css/**/*.css'],
+    js: ['js/', 'js/*.js', 'js/dbhelper.js', 'js/main.js', 'js/restaurant_info.js'],
+    vendor: ['js/vendor','js/vendor/**/*.min.js', 'js/vendor/idb.js'],
+    assets: ['img/', 'img/**/*.jpg', 'img/*.jpg', 'img/webp/'],
+    sw: ['sw.js']
 };
 
-const sizes = [400, 600, 800, 1200, 1500, 2000];
-const resizeImageTasks = [];
 
-
-
-/* Minify HTML files*/
-gulp.task('minify:html', () => {
-	return gulp.src(bases.src + paths.html[0])
-	.pipe(htmlmin({collapseWhitespace: true}))
-		.pipe(gulp.dest(bases.dist));
+// Copy and minify HTML, send to dist
+gulp.task('html', () => {
+    return gulp.src(bases.src + paths.html[0])
+        .pipe(htmlmin({ collapseWhitespace: true }))
+        .pipe(gulp.dest(bases.dist));
 });
 
-// Look here for sass gulp task setup: https://www.npmjs.com/package/node-normalize-scss
-gulp.task('sass', function () {
-	var plugins = [
-		autoprefixer({browsers:['last 2 versions'], cascade: false}),
-		cssnano()
-	];
-  return gulp.src([bases.src + paths.sass[1]])
-  	.pipe(sourcemaps.init())
-    .pipe(sass({
-    	outputStyle: 'expanded',
-    	includePaths: require('node-normalize-scss').includePaths
-    }).on('error', sass.logError))
-    .pipe(postcss(plugins))
-    .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest(bases.dist + paths.css[0]));
+// Copy,compile, minify SASS/CSS
+gulp.task('css', function() {
+    var plugins = [
+        autoprefixer({ browsers: ['last 2 versions'], cascade: false }),
+        cssnano()
+    ];
+    return gulp.src([bases.src + paths.sass[1]])
+        .pipe(sourcemaps.init())
+        .pipe(sass({
+            outputStyle: 'expanded',
+            includePaths: require('node-normalize-scss').includePaths
+        }).on('error', sass.logError))
+        .pipe(postcss(plugins))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest(bases.dist + paths.css[0]));
 });
 
-/* Make responsive images*/
-sizes.forEach((size) => {
-	const prefix = "-" + size;
-	gulp.task(prefix, () => {
-	return gulp.src(bases.src + paths.assets[1])
-		.pipe(imageResize({
-			width: size
-		}))
-		.pipe(rename(function (path){path.basename += prefix;}))
-		.pipe(gulp.dest(bases.src + paths.assets[2]));
-	});
-	resizeImageTasks.push(prefix);
+// JS
+gulp.task('js', () => {
+    return gulp.src(bases.src + paths.js[1])
+        .pipe(sourcemaps.init())
+        .pipe(babel())
+        .pipe(uglify())
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest(bases.dist + paths.js[0]));
 });
 
-gulp.task('resize-images', resizeImageTasks);
-
-/* Optimize images */
-gulp.task('webp', ['resize-images'], () => {
-	return gulp.src(bases.src + paths.assets[3])
-	.pipe(webp())
-	.pipe(gulp.dest(bases.dist + paths.assets[0]));
+// Copy Service Worker
+gulp.task('sw', () => {
+    return gulp.src(bases.src + paths.sw[0])
+    	.pipe(uglify())
+        .pipe(gulp.dest(bases.dist));
 });
 
-/* Minify JS, sourcemaps, uglify */
-gulp.task('minify:js', () => {
-	return gulp.src(bases.src + paths.js[1])
-		.pipe(sourcemaps.init())
-		.pipe(babel())
-		.pipe(uglify())
-		.pipe(sourcemaps.write('.'))
-		.pipe(gulp.dest(bases.dist + paths.js[0]));
+// Convert to webp
+gulp.task('webp', () => {
+    return gulp.src(bases.src + paths.assets[1])
+        .pipe(webp())
+        .pipe(gulp.dest(bases.src + paths.assets[3]));
 });
 
-/* Copy service worker*/
-gulp.task('copy:sw', () => {
-	return gulp.src(bases.src + paths.sw[0])
-	.pipe(gulp.dest(bases.dist));
-});
+gulp.task('assets', ['webp'], () => {
+    return gulp.src('src/img/**/*')
+        .pipe(responsive({
+            '**/*.webp': [{
+                    width: 400,
+                    rename: { suffix: '-400' }
+                },
+                {
+                    width: 600,
+                    rename: { suffix: '-600' }
+                },
+                {
+                    width: 800,
+                    rename: { suffix: '-800' }
+                }],
+              '*.jpg': [{
+              		width: 600,
+                    rename: { suffix: '-600' }
+              }]
+        },{
+            // Global configuration for all images
+            // The output quality for JPEG, WebP and TIFF output formats
+            quality: 85,
+            // Use progressive (interlace) scan for JPEG and PNG output
+            progressive: true,
+            // Strip all metadata
+            withMetadata: false,
+        }))
+        .pipe(gulp.dest(bases.dist + paths.assets[0]));
+})
 
-gulp.task('copy:vendor', () => {
+gulp.task('vendor', ['uglify:vendor'], () => {
 	return gulp.src(bases.src + paths.vendor[1])
 	.pipe(gulp.dest(bases.dist + paths.vendor[0]));
 });
 
+gulp.task('uglify:vendor', () => {
+	return gulp.src(bases.src + paths.vendor[2])
+	.pipe(uglify())
+	.pipe(rename("idb.min.js"))
+	.pipe(gulp.dest(bases.src + paths.vendor[0]));
+});
+
 /* Watch */
 gulp.task('watch', ['build'], () => {
-    gulp.watch(bases.src + paths.js[1], ['minify:js']);
-    gulp.watch(bases.src + paths.sass[1], ['sass']);
-    gulp.watch(bases.src + paths.html[0], ['minify:html']);
-    gulp.watch(bases.src + paths.sw[0], ['copy:sw']);
-    gulp.watch(bases.src + paths.vendor[1], ['copy:vendor']);
+    gulp.watch(bases.src + paths.js[1], ['js']);
+    gulp.watch(bases.src + paths.sass[1], ['css']);
+    gulp.watch(bases.src + paths.html[0], ['html']);
+    gulp.watch(bases.src + paths.sw[0], ['sw']);
 
 });
 
 /* Build task */
-gulp.task('build', ['minify:js', 'copy:sw', 'copy:vendor', 'sass', 'minify:html', 'webp']);
+gulp.task('build', ['js', 'vendor','sw', 'css', 'html', 'assets']);
 
 /* Default task */
 gulp.task('default', ['watch']);
-
-
-
