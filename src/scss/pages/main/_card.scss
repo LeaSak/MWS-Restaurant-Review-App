@@ -1,0 +1,58 @@
+/* ====================== Restaurant Listing ====================== */
+
+.restaurant-list-item {
+    margin: 0.75rem;
+    width: calc(100% - 1.5rem);
+    background: #fbfbfb;
+    /* Display two restaurant cards per row*/
+    @media (min-width: 600px){
+        margin: 0.75rem;
+        width: calc(50% - 1.5rem);
+    }
+    &:last-child{
+        @media (min-width: 600px){
+             margin: 0.75rem;
+        }
+    }
+    @media (min-width: 960px){
+        width: calc(33.33% - 1.5rem);
+    }
+}
+
+.flex-card-content {
+    padding: 1.5em;
+    background: #fbfbfb;
+}
+
+.restaurant-list-heading {
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+    @media (min-width: 720px){
+        font-size: 1.4em;
+    }
+}
+
+.neighborhood {
+    margin: 0 0 0.375rem;
+    font-size: 0.833rem;
+    text-transform: uppercase;
+    /*@media (min-width: 720px){
+        font-size: 1.4em;
+    }*/
+}
+
+.address {
+    margin: 0 0 0.75rem;
+    font-size: 0.833rem;
+    @media (min-width: 720px){
+        font-size: 1em;
+    }
+}
+
+.restaurant-link {
+    font-size: 0.833em;
+    text-decoration: none;
+    @media (min-width: 720px){
+        font-size: 1em;
+    }
+}

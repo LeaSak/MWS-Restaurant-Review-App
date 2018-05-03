@@ -214,6 +214,39 @@ class DBHelper {
     }
 
     /**
+     * Add map script to html
+     */
+    static addScript() {
+        const target = document.body;
+        const mapScript = document.createElement('script');
+        mapScript.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCSQXjgi1K6hqDS4W3nWVK_z0lntlbLFPo&libraries=places&callback=initMap';
+        target.appendChild(mapScript);
+    }
+
+    static toggleMap(anchorID, mapElemID){
+        const anchor = document.getElementById(anchorID);
+        const mapFrame = document.getElementById(mapElemID);
+        
+        anchor.addEventListener('click', (e) => {
+            // Prevent Default link behaviour
+            e.preventDefault();
+
+            // Check for map section
+            if (!mapFrame) return;
+
+            // Toggle map section visiblity
+            mapFrame.classList.toggle('is-visible');
+
+            // Fetch script only if it hasn't already been fetched
+            if (!window.google) {
+                DBHelper.addScript();
+            }
+
+        }, false);
+
+    }
+    
+    /**
      * Map marker for a restaurant.
      */
     static mapMarkerForRestaurant(restaurant, map) {

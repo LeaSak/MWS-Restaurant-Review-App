@@ -8,20 +8,21 @@ li {
 a {
     color: #906932;
     text-decoration: none;
+    &:visited {
+        color: #906932;
+    text-decoration: none;
+    }
+    &:hover,
+    &:active {
+        outline: none;
+        color: #056ac1;
+        text-decoration: underline;
+    }
 }
-
-a:hover,
-a:focus {
-    outline: none;
-    color: #056ac1;
-    text-decoration: underline;
-}
-
 
 select:hover,
 select:focus {
     outline: none;
-    background: #fbfbfb;
 }
 
 

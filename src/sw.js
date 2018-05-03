@@ -4,7 +4,6 @@ const CACHE_IMAGES = 'restaurant-app-images-v1';
 const STATIC_ASSETS = [
     '/',
     'restaurant.html',
-    'css/app-600.css',
     'css/app-main.css',
     'css/app-restaurant.css',
     'js/dbhelper.js',
@@ -48,7 +47,7 @@ self.addEventListener('fetch', (event) => {
         }
 
         // add images to photo cache
-        if (requestUrl.pathname.endsWith('.webp')) {
+        if (requestUrl.pathname.endsWith('.webp') || requestUrl.pathname.endsWith('.jpg')) {
             event.respondWith(servePhoto(event.request));
             return;
         }

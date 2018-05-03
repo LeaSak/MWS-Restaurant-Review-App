@@ -1,0 +1,57 @@
+/* ====================== Restaurant Filtering ====================== */
+.title-sm {
+    margin: 0 0 0.75rem;
+    width: 100%;
+    font-size: 1em;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.label {
+    font-size: 0.81em;
+    color: #4e4947;
+    display: block;
+    @media (min-width: 600px) {
+        margin-top: 0.75rem;
+    }
+    @media (min-width: 840px) {
+        font-size: 0.833em;
+    }
+}
+
+.select-bar {
+    background-color: #ffffff;
+    font-family: Work Sans, sans-serif;
+    font-size: 0.833em;
+    height: 2.625rem;
+    letter-spacing: 0;
+    margin: 0.125rem 0 0.75rem 0;
+    padding: 0 0.75rem;
+    width: 100%;
+    border: 2px solid #e0e0e0;
+    display: block;
+    border-radius: 5px;
+    @media (min-width: 840px) {
+        font-size: 0.972em;
+    }
+    &:focus,
+    &:hover {
+    background-color: #f4f5f6;
+    }
+}
+
+ /* Display filter side by side */
+.results-filter {
+    width: 100%;
+    margin: 0.75rem 0 0;
+    @media (min-width: 600px) {
+        width: calc(50% - 0.75rem);
+        margin: 0 0.75rem 0 0;
+    }
+}
+
+.results-filter:last-child {
+    @media (min-width: 600px) {
+        margin: 0 0 0 0.75rem;
+    }
+}

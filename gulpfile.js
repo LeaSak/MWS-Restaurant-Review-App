@@ -12,6 +12,7 @@ const gulp = require('gulp'),
     concat = require('gulp-concat'),
     webp = require('gulp-webp'),
     responsive = require('gulp-responsive'),
+    critical = require('critical'),
     pump = require('pump');
 
 const bases = {
@@ -54,6 +55,20 @@ gulp.task('css', function() {
         .pipe(gulp.dest(bases.dist + paths.css[0]));
 });
 
+// // Critical CSS: Index.html
+// gulp.task('critical:main', ['build'], () => {
+//     return critical.generate({
+//         base: 'dist/',
+//         src: 'index.html',
+//         dest: 'index.html', 
+//         inline: true, 
+//         css: ['dist/css/app-main.css', 'dist/css/app-600.css'],
+//         // minify: true,
+//         width: 320,
+//         height: 730
+//         })
+// });
+
 // JS
 gulp.task('js', () => {
     return gulp.src(bases.src + paths.js[1])
@@ -67,7 +82,10 @@ gulp.task('js', () => {
 // Copy Service Worker
 gulp.task('sw', () => {
     return gulp.src(bases.src + paths.sw[0])
+        .pipe(sourcemaps.init())
+        .pipe(babel())
     	.pipe(uglify())
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(bases.dist));
 });
 

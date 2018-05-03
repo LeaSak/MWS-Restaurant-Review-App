@@ -1,0 +1,46 @@
+/* ====================== Grid ====================== */
+
+.showcase-grid {
+    width: 100%;
+    padding: 0.75rem;
+    max-width: 648px;
+    margin: 0 auto;
+    @media (min-width: 720px){
+         max-width: 1020px;
+    }
+}
+
+
+/* narrow flex-grid*/
+
+.breadcrumb-grid,
+.reviews-grid {
+    width: 100%;
+    padding: 0.75rem;
+    max-width: 648px;
+    margin: 0 auto;
+    display: flex;
+    flex-flow: row wrap;
+    @media (min-width: 720px){
+         max-width: 1020px;
+    }
+}
+
+.reviews-grid{
+    
+    &:focus{
+    outline:none;
+    }
+
+    &:focus {
+    outline:none;
+    }
+}
+
+#map-section{
+    display: none;
+}
+
+#map-section.is-visible {
+    display:block;
+}

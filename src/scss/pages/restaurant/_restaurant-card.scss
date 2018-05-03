@@ -1,0 +1,97 @@
+/* ====================== Restaurant Details ====================== */
+
+
+/* restaurant card cells*/
+
+.showcase-cell,
+.showcase-cell-flex {
+    width: calc(100% - 1.5rem);
+    margin: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #fbfbfb;
+}
+
+.showcase-cell-flex {
+    display: flex;
+    flex-flow: row wrap;
+    padding: 0;
+    @media (min-width: 600px) {
+        padding: 0.75rem;
+    }
+}
+
+
+/* nested restaurant card cells*/
+
+.showcase-name,
+.info-tile {
+    margin: 0.75rem;
+    width: calc(100% - 1.5rem);
+}
+
+.info-tile {
+    @media (min-width: 720px){
+        width: calc(50% - 1.5rem);
+    }
+}
+
+/* card typography*/
+
+.showcase-name {
+    padding: 0;
+    font-weight: 500;
+    @media (min-width: 720px){
+        font-size: 1.4em;
+    }
+}
+
+.info-title {
+    font-size: 0.833em;
+    @media (min-width: 720px){
+        font-size: 1em;
+    }
+}
+
+.showcase-address {
+    margin: 0;
+    font-size: 0.833em;
+    @media (min-width: 720px){
+        font-size: 1em;
+    }
+}
+
+.map-link {
+    font-size: 0.833em;
+    @media (min-width: 720px){
+        font-size: 1em;
+    }
+}
+
+.showcase-cuisine {
+    text-transform: uppercase;
+    margin: 0 0 1.5rem;
+    font-size: 0.833em;
+    @media (min-width: 720px){
+        font-size: 1em;
+    }
+}
+
+.day,
+.time {
+    font-size: 0.833em;
+    vertical-align: top;
+    padding: 6px;
+    text-align: left;
+    @media (min-width: 720px){
+        font-size: 1em;
+    }
+}
+
+.day {
+    padding-left: 0;
+}
+
+.time {
+    color: #676361;
+}

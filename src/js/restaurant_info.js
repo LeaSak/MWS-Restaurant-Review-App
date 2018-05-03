@@ -1,17 +1,22 @@
-/**
- * Initialize Google map, called from HTML.
- */
 
-window.initMap = () => {
-    return fetchRestaurantFromURL()
-    .then((restaurant) => {
-            self.map = new google.maps.Map(document.getElementById('map'), {
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    fetchRestaurantFromURL();
+    DBHelper.toggleMap('map-anchor', 'map-section');
+});
+
+
+/**
+ * Initialize Google map
+ */
+window.initMap = (restaurant = self.restaurant) => {
+    self.map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 16,
                 center: restaurant.latlng,
                 scrollwheel: false
             });
             
-            fillBreadcrumb();
+            //fillBreadcrumb();
             
             DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
             
@@ -20,14 +25,10 @@ window.initMap = () => {
                 iFrame.setAttribute('title', 'Map with selected restaurant marker');
             }
             self.map.addListener('tilesloaded', setTitle);
-    })
-    .catch(error => {
-        console.error(error);
-    });
 };
+
 /**
  * Get current restaurant from page URL.
- * Error handling is in window.initMap()
  */
 const fetchRestaurantFromURL = () => {
     if (self.restaurant) {
@@ -41,6 +42,11 @@ const fetchRestaurantFromURL = () => {
                 fillRestaurantHTML();
                 return restaurant;
     })
+    .then((restaurant) => {
+        fillBreadcrumb(restaurant)
+        return restaurant;
+    })
+    .catch(DBHelper.logError);
 };
 
 /**

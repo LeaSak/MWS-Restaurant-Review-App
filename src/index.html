@@ -3,66 +3,61 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Restaurant Reviews</title>
-    <!-- Preload resources -->
-    <!-- <link rel="preload" href="css/app-main.css" as="style">
-    <link rel="preload" href="css/app-600.css" media="(min-width:600px)" as="style">
-    <link rel="preload" src="js/vendor/idb.js" as="script"></link>
-    <link rel="preload" src="js/dbhelper.js" as="script"></link>
-    <link rel="preload" src="js/main.js" as="script"></link> -->
-    <link rel="stylesheet" href="css/app-main.css">
-    <link rel="stylesheet" href="css/app-600.css" media="(min-width:600px)">
+    <title>Restaurant Reviews App</title>
+    <link href="https://fonts.googleapis.com/css?family=Work+Sans:400,500" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/app-main.css">
 </head>
 
 <body>
-
     <!-- Main navigation -->
     <header>
         <nav class="primary-nav">
             <h1 class="header-title"><a class="header-link" href="/">Restaurant Reviews</a></h1>
         </nav>
     </header>
-    
-    <!-- For Screen Readers - A link to skip Map -->
-    <a class="skip-main" href="#filter-section">Skip to main content</a>
-    
     <!-- Filter and Restaurant Content -->
     <main class="main-content">
-        <section class="map-grid">
-            <div aria-label="interactive map with restaurant markers" role="application" id="map"></div>
-        </section>
-        <section class="filter-grid" aria-labelledby="filter-heading" id="filter-section" tabindex="-1">
-            <h2 id="filter-heading" class="title-sm">Filter Results</h2>
-            <div class="results-filter">
-                <label class="label" for="neighborhoods-select">By Area</label>
-                <select class="select-bar" id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
-                    <option value="all">All Neighborhoods</option>
-                </select>
+        <section aria-labelledby="filter-heading" id="filter-section" tabindex="-1">
+            <div class="filter-grid">
+                <h2 id="filter-heading" class="title-sm">Filter Results</h2>
+                    <div class="results-filter">
+                        <label class="label" for="neighborhoods-select">Filter By Area</label>
+                        <select class="select-bar" id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
+                            <option value="all">All Neighborhoods</option>
+                        </select>
+                    </div>
+                    <div class="results-filter">
+                        <label class="label" for="cuisines-select">Filter By Cuisine</label>
+                        <select class="select-bar" id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
+                            <option value="all">All Cuisines</option>
+                        </select>
+                    </div>
             </div>
-            <div class="results-filter">
-                <label class="label" for="cuisines-select">By Cuisine</label>
-                <select class="select-bar" id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
-                    <option value="all">All Cuisines</option>
-                </select>
+        </section>
+        <section id="map-section" class="map-grid">
+            <!-- For Screen Readers - A link to skip Map -->
+            <!-- <a class="skip-main" href="#filter-section">Skip to main content</a> -->
+            <div class="btn-cell">
+                <a id="map-btn" role="button" class="toggle" href="#map-cell">Toggle Map</a>
+            </div>
+            <div id="map-cell" class="map-box">
+                <div aria-label="interactive map with restaurant markers" role="application" id="map"></div>
             </div>
         </section>
         <section>
             <ul class="restaurants-grid" id="restaurants-list" role="content-list"></ul>
         </section>
     </main>
-    
     <!-- Footer -->
     <footer class="footer-grid">
         Copyright (c) 2017 <a class="footer-link" href="/">Restaurant Reviews</a> All Rights Reserved.
     </footer>
-    
     <!-- Scripts -->
-    <script src="js/vendor/idb.min.js"></script>
-    <script src="js/dbhelper.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/vendor/lazysizes.min.js" async=""></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSQXjgi1K6hqDS4W3nWVK_z0lntlbLFPo&libraries=places&callback=initMap"></script>
-    <script src="sw.js"></script>
+    <script defer src="js/vendor/idb.min.js"></script>
+    <script defer src="js/dbhelper.js"></script>
+    <script defer src="js/main.js"></script>
+    <script defer src="js/vendor/lazysizes.min.js" async=""></script>
+    <script defer src="sw.js"></script>
 </body>
 
 </html>

@@ -20,6 +20,7 @@
     "autoprefixer": "^8.3.0",
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "critical": "^1.2.2",
     "cssnano": "^3.10.0",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^5.0.0",

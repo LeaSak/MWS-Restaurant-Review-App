@@ -9,6 +9,8 @@ var map, markers = [];
 document.addEventListener('DOMContentLoaded', (event) => {
     fetchNeighborhoods();
     fetchCuisines();
+    updateRestaurants();
+    DBHelper.toggleMap('map-btn', 'map-cell');
 });
 
 /**
@@ -60,6 +62,33 @@ const fillCuisinesHTML = (cuisines = self.cuisines) => {
         select.append(option);
     });
 };
+
+const showMap = () => {
+    const mapBtn = document.getElementById('map-btn');
+    const mapFrame = document.getElementById('map-cell');
+
+    mapBtn.addEventListener('click', (e) => {
+
+        // Check we've clicked on the right target
+        if (!e.target.classList.contains('toggle')) return;
+
+        // Prevent Default link behaviour
+        e.preventDefault();
+
+        // Check for map section
+        if (!mapFrame) return;
+
+        // Toggle map section visiblity
+        mapFrame.classList.toggle('is-visible');
+
+        // Fetch script only if it hasn't already been fetched
+        if (!window.google) {
+            DBHelper.addScript();
+        }
+
+    }, false);
+}
+
 
 /**
  * Initialize Google map, called from HTML.
@@ -114,9 +143,13 @@ const resetRestaurants = (restaurants) => {
     const ul = document.getElementById('restaurants-list');
     ul.textContent = '';
 
-    // Remove all map markers
-    self.markers.forEach(m => m.setMap(null));
-    self.markers = [];
+    // Remove all map markers if map
+    if (map) {
+        console.log("markers deleted");
+        self.markers.forEach(m => m.setMap(null));
+        self.markers = [];
+    }
+
     self.restaurants = restaurants;
 };
 
@@ -126,7 +159,9 @@ const resetRestaurants = (restaurants) => {
 const fillRestaurantsHTML = (restaurants = self.restaurants) => {
     const ul = document.getElementById('restaurants-list');
     ul.innerHTML = restaurants.map(restaurant => createRestaurantHTML(restaurant)).join('');
-    addMarkersToMap();
+    if (window.google) {
+        addMarkersToMap();
+    }
 };
 
 /**
