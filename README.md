@@ -27,11 +27,7 @@ https://github.com/LeaSak/mws-restaurant-stage-1
 
 To view the app, navigate to the project, go to the project's **dist** directory. In this folder, start up a simple HTTP server to serve up the site files on your local computer. For example, with Python: `python -m SimpleHTTPServer 8000`
 
-Also, clone the server repository and follow the instructions to get the local development API server up and running:
-
-```sh
-https://github.com/udacity/mws-restaurant-stage-2
-```
+Also, clone the server repository from [here](https://github.com/udacity/mws-restaurant-stage-2). Follow the instructions to get the local development API server up and running.
 
 So far it's only been tested in Google Chrome.
 
