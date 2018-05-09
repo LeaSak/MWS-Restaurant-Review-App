@@ -63,33 +63,6 @@ const fillCuisinesHTML = (cuisines = self.cuisines) => {
     });
 };
 
-const showMap = () => {
-    const mapBtn = document.getElementById('map-btn');
-    const mapFrame = document.getElementById('map-cell');
-
-    mapBtn.addEventListener('click', (e) => {
-
-        // Check we've clicked on the right target
-        if (!e.target.classList.contains('toggle')) return;
-
-        // Prevent Default link behaviour
-        e.preventDefault();
-
-        // Check for map section
-        if (!mapFrame) return;
-
-        // Toggle map section visiblity
-        mapFrame.classList.toggle('is-visible');
-
-        // Fetch script only if it hasn't already been fetched
-        if (!window.google) {
-            DBHelper.addScript();
-        }
-
-    }, false);
-}
-
-
 /**
  * Initialize Google map, called from HTML.
  */
