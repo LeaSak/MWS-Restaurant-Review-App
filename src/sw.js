@@ -10,7 +10,8 @@ const STATIC_ASSETS = [
     'js/main.js',
     'js/restaurant_info.js',
     'js/vendor/idb.min.js',
-    'js/vendor/lazysizes.min.js'
+    'js/vendor/lazysizes.min.js',
+    'https://fonts.googleapis.com/css?family=Work+Sans:400,500" rel="stylesheet'
 ];
 
 // Check for service worker and do sw registration
@@ -47,7 +48,7 @@ self.addEventListener('fetch', (event) => {
         }
 
         // add images to photo cache
-        if (requestUrl.pathname.endsWith('.webp') || requestUrl.pathname.endsWith('.jpg')) {
+        if (requestUrl.pathname.startsWith('/img/')) {
             event.respondWith(servePhoto(event.request));
             return;
         }
@@ -71,8 +72,8 @@ self.addEventListener('fetch', (event) => {
 
 
 function servePhoto(request) {
-    var storageUrl = request.url.replace(/-\d+\.webp$/, '');
-
+    var storageUrl = request.url.replace(/-\d+\.[^.]+$/, '');
+    
     return caches.open(CACHE_IMAGES).then(cache => {
         return cache.match(storageUrl).then(response => {
             if (response) return response;

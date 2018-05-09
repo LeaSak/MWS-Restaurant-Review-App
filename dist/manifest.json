@@ -1,0 +1,36 @@
+{
+  "short_name": "Restaurant Reviews",
+  "name": "Restaurant Reviews",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "lang": "en-US",
+  "background_color": "#fff",
+  "theme_color": "#fff",
+  "icons":[
+    {
+      "src": "icons/app-logo-48.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "icons/app-logo-96.png",
+      "type": "image/png",
+      "sizes": "96x96"
+
+    },
+    {
+      "src": "icons/app-logo-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+
+    },
+    {
+      "src": "icons/app-logo-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+
+    }
+
+  ]
+}

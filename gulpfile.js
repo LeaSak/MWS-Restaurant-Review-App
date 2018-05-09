@@ -12,7 +12,7 @@ const gulp = require('gulp'),
     concat = require('gulp-concat'),
     webp = require('gulp-webp'),
     responsive = require('gulp-responsive'),
-    critical = require('critical'),
+    // critical = require('critical'),
     pump = require('pump');
 
 const bases = {
@@ -27,7 +27,8 @@ const paths = {
     js: ['js/', 'js/*.js', 'js/dbhelper.js', 'js/main.js', 'js/restaurant_info.js'],
     vendor: ['js/vendor','js/vendor/**/*.min.js', 'js/vendor/idb.js'],
     assets: ['img/', 'img/**/*.jpg', 'img/*.jpg', 'img/webp/'],
-    sw: ['sw.js']
+    sw: ['sw.js'],
+    manifest: ['manifest.json']
 };
 
 
@@ -89,6 +90,12 @@ gulp.task('sw', () => {
         .pipe(gulp.dest(bases.dist));
 });
 
+// Copy Manifest
+gulp.task('manifest', () => {
+    return gulp.src(bases.src + paths.manifest[0])
+    .pipe(gulp.dest(bases.dist));
+});
+
 // Convert to webp
 gulp.task('webp', () => {
     return gulp.src(bases.src + paths.assets[1])
@@ -127,6 +134,12 @@ gulp.task('assets', ['webp'], () => {
         .pipe(gulp.dest(bases.dist + paths.assets[0]));
 })
 
+/* Icons */
+gulp.task('icons', () => {
+    return gulp.src(bases.src + 'icons/*.png')
+    .pipe(gulp.dest(bases.dist + 'icons/'));
+});
+
 gulp.task('vendor', ['uglify:vendor'], () => {
 	return gulp.src(bases.src + paths.vendor[1])
 	.pipe(gulp.dest(bases.dist + paths.vendor[0]));
@@ -145,11 +158,13 @@ gulp.task('watch', ['build'], () => {
     gulp.watch(bases.src + paths.sass[1], ['css']);
     gulp.watch(bases.src + paths.html[0], ['html']);
     gulp.watch(bases.src + paths.sw[0], ['sw']);
+    gulp.watch(bases.src + paths.manifest[0], ['manifest']);
+    gulp.watch(bases.src + 'icons/*.png', ['icons']);
 
 });
 
 /* Build task */
-gulp.task('build', ['js', 'vendor','sw', 'css', 'html', 'assets']);
+gulp.task('build', ['js', 'vendor','sw', 'manifest', 'css', 'html', 'assets', 'icons']);
 
 /* Default task */
 gulp.task('default', ['watch']);

@@ -3,20 +3,23 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#FFFFFF"/>
     <title>Restaurant Reviews App</title>
+    <!-- TODO: add favicons -->
     <link href="https://fonts.googleapis.com/css?family=Work+Sans:400,500" rel="stylesheet">
+    <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" type="text/css" href="css/app-main.css">
 </head>
 
 <body>
     <!-- Main navigation -->
-    <header>
+    <header role="banner">
         <nav class="primary-nav">
             <h1 class="header-title"><a class="header-link" href="/">Restaurant Reviews</a></h1>
         </nav>
     </header>
     <!-- Filter and Restaurant Content -->
-    <main class="main-content">
+    <main class="main-content" role="main">
         <section aria-labelledby="filter-heading" id="filter-section" tabindex="-1">
             <div class="filter-grid">
                 <h2 id="filter-heading" class="title-sm">Filter Results</h2>
@@ -35,8 +38,6 @@
             </div>
         </section>
         <section id="map-section" class="map-grid">
-            <!-- For Screen Readers - A link to skip Map -->
-            <!-- <a class="skip-main" href="#filter-section">Skip to main content</a> -->
             <div class="btn-cell">
                 <a id="map-btn" role="button" class="toggle" href="#map-cell">Toggle Map</a>
             </div>
@@ -45,11 +46,11 @@
             </div>
         </section>
         <section>
-            <ul class="restaurants-grid" id="restaurants-list" role="content-list"></ul>
+            <ul class="restaurants-grid" id="restaurants-list"></ul>
         </section>
     </main>
     <!-- Footer -->
-    <footer class="footer-grid">
+    <footer class="footer-grid" role="contentinfo">
         Copyright (c) 2017 <a class="footer-link" href="/">Restaurant Reviews</a> All Rights Reserved.
     </footer>
     <!-- Scripts -->
