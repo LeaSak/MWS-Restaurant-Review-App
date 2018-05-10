@@ -113,7 +113,7 @@ const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hour
  */
 const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     const container = document.getElementById('reviews-container');
-    const title = document.createElement('h2');
+    const title = document.createElement('h4');
     title.className = 'review-section-title';
     title.textContent = 'Reviews';
     container.appendChild(title);
