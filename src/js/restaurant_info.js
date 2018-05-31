@@ -15,11 +15,9 @@ window.initMap = (restaurant = self.restaurant) => {
                 center: restaurant.latlng,
                 scrollwheel: false
             });
-            
-            //fillBreadcrumb();
-            
+
             DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
-            
+
             let setTitle = () => {
                 const iFrame = document.querySelector('#map iframe');
                 iFrame.setAttribute('title', 'Map with selected restaurant marker');
@@ -37,8 +35,9 @@ const fetchRestaurantFromURL = () => {
 
     const id = getParameterByName('id');
     return DBHelper.fetchRestaurantById(id)
-        .then((restaurant) => {
+    .then((restaurant) => {
                 self.restaurant = restaurant;
+                console.log(restaurant);
                 fillRestaurantHTML();
                 return restaurant;
     })
@@ -109,35 +108,46 @@ const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hour
 };
 
 /**
+ * Fetch reviews from Database or network
  * Create all reviews HTML and add them to the webpage.
  */
-const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
+const fillReviewsHTML = () => {
     const container = document.getElementById('reviews-container');
     const title = document.createElement('h4');
     title.className = 'review-section-title';
     title.textContent = 'Reviews';
     container.appendChild(title);
+    console.log(restaurant.id);
 
-    if (!reviews) {
-        const noReviews = document.createElement('p');
-        noReviews.textContent = 'No reviews yet!';
-        container.appendChild(noReviews);
-        return;
-    }
-    const ul = document.getElementById('reviews-list');
-    ul.innerHTML = reviews.map(review => createReviewHTML(review)).join('');
-    container.appendChild(ul);
+    // Fetch all restaurant reviews and append to page
+    return DBHelper.fetchReviewsById(restaurant.id)
+    .then((reviews) => {
+
+        if (reviews.length === 0) {
+            const noReviews = document.createElement('p');
+            noReviews.textContent = 'No reviews yet!';
+            container.appendChild(noReviews);
+            return;
+        }
+
+        const ul = document.getElementById('reviews-list');
+        ul.innerHTML = reviews.map(review => createReviewHTML(review)).join('');
+        container.appendChild(ul);
+
+
+    })
+    .catch(DBHelper.logError);
 };
 
 /**
  * Create review HTML and add it to the webpage.
  */
 const createReviewHTML = (review) => {
-    const reviewHTML = 
+    const reviewHTML =
     `<li class="reviews-list-item">
         <div class="name-container">
             <p>${review.name}</p>
-            <p class="review-date">${review.date}</p>
+            <p class="review-date">${review.createdAt}</p>
         </div>
         <p class="rating">Rating: ${review.rating}</p>
         <p class="comments">${review.comments}</p>

@@ -17,9 +17,13 @@ class DBHelper {
                 case 1:
                     console.log('Creating the restaurants object store');
                     upgradeDb.createObjectStore('restaurants', { keyPath: 'id' });
+
+                case 2:
+                    console.log('Creating the reviews object store');
+                    upgradeDb.createObjectStore('reviews', { keyPath: 'id'})
             }
         })
-        
+
         return idbPromise;
     }
 
@@ -55,7 +59,42 @@ class DBHelper {
         .then((db) => {
             const tx = db.transaction('restaurants', 'readonly');
             const store = tx.objectStore('restaurants');
-            console.log('fetching restaurants from database');
+            return store.getAll();
+        });
+    }
+
+    /**
+     * Add reviews to the database
+     */
+     static addReviewsToDB(reviews){
+        return DBHelper.createDatabase()
+        .then((db) => {
+            if (!db) {
+                    return;
+                }
+            const tx = db.transaction('reviews', 'readwrite');
+            const store = tx.objectStore('reviews');
+
+            return Promise.all(reviews.map(review => {
+                console.log('adding reviews to database');
+                return store.put(review);
+            }));
+
+        })
+        .catch((error) => {
+            tx.abort();
+            console.error(error);
+        });
+     }
+
+    /**
+     * Fetch reviews from database
+     */
+    static fetchReviewsFromDB(){
+        return DBHelper.createDatabase()
+        .then((db) => {
+            const tx = db.transaction('reviews', 'readonly');
+            const store = tx.objectStore('reviews');
             return store.getAll();
         });
     }
@@ -65,10 +104,12 @@ class DBHelper {
      * Database URL.
      * Change this to restaurants.json file location on your server.
      */
+
     static get DATABASE_URL() {
         const port = 1337; // Change this to your server port
-        return `http://localhost:${port}/restaurants`;
+        return `http://localhost:${port}`;
     }
+
 
     static logError(error) {
         console.error(error);
@@ -86,12 +127,11 @@ class DBHelper {
         return restaurants;
     }
 
-
     /**
      * Go to network to get restaurants
      */
     static fetchRestaurantsFromNetwork(){
-        return fetch(DBHelper.DATABASE_URL)
+        return fetch(DBHelper.DATABASE_URL + '/restaurants')
         .then(DBHelper.validateJSON)
         .then(DBHelper.defineRestaurants);
     }
@@ -102,11 +142,10 @@ class DBHelper {
      * Fetches restaurants from server
      * Adds them to the database
      * Returns dynamic request results
-     * 
+     *
      */
 
     static fetchRestaurants() {
-        console.log('calling fetchRestaurants');
         // First try to get results from Database
         return DBHelper.fetchRestaurantsFromDB()
             .then(function(response) {
@@ -126,17 +165,47 @@ class DBHelper {
     }
 
     /**
+     * Go to network to get reviews
+     */
+    static fetchReviewsByIdFromNetwork(id) {
+        return fetch(DBHelper.DATABASE_URL + `/reviews/?restaurant_id=${id}`)
+        .then(DBHelper.validateJSON)
+        .then(response => {
+            return response;
+        })
+
+    }
+
+    /**
+     * Fetch reviews from DB
+     * If no reviews, fetch from network
+     * add to database
+     */
+    static fetchReviewsById(id){
+        return DBHelper.fetchReviewsFromDB()
+        .then(function(response){
+            if (response.length === 0) {
+                    return DBHelper.fetchReviewsByIdFromNetwork(id)
+                    .then(response => {
+                        DBHelper.addReviewsToDB(response);
+                        return response;
+                    })
+                    .catch(DBHelper.logError);
+                }
+                return response;
+        })
+    }
+
+    /**
      * Fetch a restaurant by its ID.
      * Error handling is in window.initMap()
      */
     static fetchRestaurantById(id) {
-        return DBHelper.fetchRestaurants()
-            .then(response => {
-                const restaurant = response.find(r => r.id == id);
-                if (restaurant) {
-                    return restaurant;
-                }
-            });
+        return fetch(DBHelper.DATABASE_URL + '/restaurants/' + id)
+            .then(DBHelper.validateJSON)
+            .then((response) => {
+                return response;
+            })
     }
 
     /**
@@ -208,8 +277,8 @@ class DBHelper {
      * Restaurant image srcset string.
      */
     static srcsetForRestaurant(restaurant) {
-        return (`img/webp/${restaurant.id}-400.webp 400w, 
-      img/webp/${restaurant.id}-600.webp 600w, 
+        return (`img/webp/${restaurant.id}-400.webp 400w,
+      img/webp/${restaurant.id}-600.webp 600w,
       img/webp/${restaurant.id}-800.webp 800w`);
     }
 
@@ -226,7 +295,7 @@ class DBHelper {
     static toggleMap(anchorID, mapElemID){
         const anchor = document.getElementById(anchorID);
         const mapFrame = document.getElementById(mapElemID);
-        
+
         anchor.addEventListener('click', (e) => {
             // Prevent Default link behaviour
             e.preventDefault();
@@ -245,7 +314,7 @@ class DBHelper {
         }, false);
 
     }
-    
+
     /**
      * Map marker for a restaurant.
      */
