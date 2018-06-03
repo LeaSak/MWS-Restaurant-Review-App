@@ -1,4 +1,4 @@
-# Mobile Web Specialist Certification Course - Project 1
+# Mobile Web Specialist Certification Course - Project 3
 ---
 
 ### Project Tasks
