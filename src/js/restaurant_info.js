@@ -143,15 +143,20 @@ const fillReviewsHTML = () => {
  * Create review HTML and add it to the webpage.
  */
 const createReviewHTML = (review) => {
+    const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    const date = new Date(review.createdAt).toLocaleString('en-US', dateOptions);
+    console.log(date);
+
     const reviewHTML =
     `<li class="reviews-list-item">
         <div class="name-container">
             <p>${review.name}</p>
-            <p class="review-date">${review.createdAt}</p>
+            <p class="review-date">${date}</p>
         </div>
         <p class="rating">Rating: ${review.rating}</p>
         <p class="comments">${review.comments}</p>
     </li>`;
+
     return reviewHTML;
 };
 
