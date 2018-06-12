@@ -1,0 +1,12 @@
+.iconic-heart{
+    width: 1.5em;
+    height: 1.5em;
+    fill: #A9ACAE;
+    /* disable click events for icon*/
+    pointer-events:none;
+    transition: fill 500ms;
+}
+
+.favourite-toggle[aria-pressed="true"] > svg {
+    fill: indianred;
+}

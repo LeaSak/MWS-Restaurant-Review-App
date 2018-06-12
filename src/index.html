@@ -3,7 +3,7 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#FFFFFF"/>
+    <meta name="theme-color" content="#FFFFFF" />
     <title>Restaurant Reviews App</title>
     <!-- TODO: add favicons -->
     <link href="https://fonts.googleapis.com/css?family=Work+Sans:400,500" rel="stylesheet">
@@ -23,18 +23,18 @@
         <section aria-labelledby="filter-heading" id="filter-section" tabindex="-1">
             <div class="filter-grid">
                 <h2 id="filter-heading" class="title-sm">Filter Results</h2>
-                    <div class="results-filter">
-                        <label class="label" for="neighborhoods-select">Filter By Area</label>
-                        <select class="select-bar" id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
-                            <option value="all">All Neighborhoods</option>
-                        </select>
-                    </div>
-                    <div class="results-filter">
-                        <label class="label" for="cuisines-select">Filter By Cuisine</label>
-                        <select class="select-bar" id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
-                            <option value="all">All Cuisines</option>
-                        </select>
-                    </div>
+                <div class="results-filter">
+                    <label class="label" for="neighborhoods-select">Filter By Area</label>
+                    <select class="select-bar" id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
+                        <option value="all">All Neighborhoods</option>
+                    </select>
+                </div>
+                <div class="results-filter">
+                    <label class="label" for="cuisines-select">Filter By Cuisine</label>
+                    <select class="select-bar" id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
+                        <option value="all">All Cuisines</option>
+                    </select>
+                </div>
             </div>
         </section>
         <section id="map-section" class="map-grid">

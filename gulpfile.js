@@ -27,6 +27,7 @@ const paths = {
     js: ['js/', 'js/*.js', 'js/dbhelper.js', 'js/main.js', 'js/restaurant_info.js'],
     vendor: ['js/vendor','js/vendor/**/*.min.js', 'js/vendor/idb.js'],
     assets: ['img/', 'img/**/*.jpg', 'img/*.jpg', 'img/webp/'],
+    icons: ['icons/**/*'],
     sw: ['sw.js'],
     manifest: ['manifest.json']
 };
@@ -61,8 +62,8 @@ gulp.task('css', function() {
 //     return critical.generate({
 //         base: 'dist/',
 //         src: 'index.html',
-//         dest: 'index.html', 
-//         inline: true, 
+//         dest: 'index.html',
+//         inline: true,
 //         css: ['dist/css/app-main.css', 'dist/css/app-600.css'],
 //         // minify: true,
 //         width: 320,
@@ -136,7 +137,7 @@ gulp.task('assets', ['webp'], () => {
 
 /* Icons */
 gulp.task('icons', () => {
-    return gulp.src(bases.src + 'icons/*.png')
+    return gulp.src(bases.src + paths.icons[0])
     .pipe(gulp.dest(bases.dist + 'icons/'));
 });
 
