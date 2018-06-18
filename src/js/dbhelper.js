@@ -20,7 +20,7 @@ class DBHelper {
 
                 case 2:
                     console.log('Creating the reviews object store');
-                    upgradeDb.createObjectStore('reviews', { keyPath: 'id'})
+                    upgradeDb.createObjectStore('reviews', { keyPath: 'id' })
             }
         })
 
@@ -30,10 +30,10 @@ class DBHelper {
     /**
      * Add restaurants to the database
      */
-    static addRestaurantsToDB(restaurants){
+    static addRestaurantsToDB(restaurants) {
         return DBHelper.createDatabase()
-        .then((db) => {
-            if (!db) {
+            .then((db) => {
+                if (!db) {
                     return;
                 }
                 const tx = db.transaction('restaurants', 'readwrite');
@@ -43,8 +43,8 @@ class DBHelper {
                     console.log('adding restaurants to database');
                     return store.put(restaurant);
                 }));
-        })
-        .catch((error) => {
+            })
+            .catch((error) => {
                 tx.abort();
                 console.error(error);
             });
@@ -54,51 +54,87 @@ class DBHelper {
     /**
      * Get all restaurants from the database
      */
-    static fetchRestaurantsFromDB(){
+    static fetchRestaurantsFromDB() {
         return DBHelper.createDatabase()
-        .then((db) => {
-            const tx = db.transaction('restaurants', 'readonly');
-            const store = tx.objectStore('restaurants');
-            return store.getAll();
-        });
+            .then((db) => {
+                const tx = db.transaction('restaurants', 'readonly');
+                const store = tx.objectStore('restaurants');
+                return store.getAll();
+            });
     }
 
     /**
      * Add reviews to the database
      */
-     static addReviewsToDB(reviews){
+    static addReviewsToDB(reviews) {
         return DBHelper.createDatabase()
-        .then((db) => {
-            if (!db) {
+            .then((db) => {
+                if (!db) {
                     return;
                 }
-            const tx = db.transaction('reviews', 'readwrite');
-            const store = tx.objectStore('reviews');
+                const tx = db.transaction('reviews', 'readwrite');
+                const store = tx.objectStore('reviews');
 
-            return Promise.all(reviews.map(review => {
-                console.log('adding reviews to database');
-                return store.put(review);
-            }));
+                return Promise.all(reviews.map(review => {
+                    console.log('adding reviews to database');
+                    return store.put(review);
+                }));
 
-        })
-        .catch((error) => {
-            tx.abort();
-            console.error(error);
-        });
-     }
+            })
+            .catch((error) => {
+                tx.abort();
+                console.error(error);
+            });
+    }
 
     /**
      * Fetch reviews from database
      */
-    static fetchReviewsFromDB(){
+    static fetchReviewsFromDB() {
         return DBHelper.createDatabase()
-        .then((db) => {
-            const tx = db.transaction('reviews', 'readonly');
-            const store = tx.objectStore('reviews');
-            return store.getAll();
+            .then((db) => {
+                const tx = db.transaction('reviews', 'readonly');
+                const store = tx.objectStore('reviews');
+                return store.getAll();
+            });
+    }
+
+
+    /**
+     * Update favourite status in client side database
+     */
+    static updateFavouriteStatusinDB(restaurant, status) {
+        return DBHelper.createDatabase()
+            .then(db => DBHelper.getRestaurantFromDB(db, restaurant))
+            .then(response => DBHelper.setFavouriteStatus(response, status))
+            .then(response => DBHelper.addFavoriteStatustoDB(response))
+            .catch(DBHelper.logError);
+    }
+
+
+    static getRestaurantFromDB(db, restaurant) {
+        const tx = db.transaction('restaurants', 'readwrite');
+        const store = tx.objectStore('restaurants');
+        return store.get(restaurant);
+    }
+
+    static setFavouriteStatus(response, status) {
+        return new Promise((resolve, reject) => {
+            const selectedRestaurant = response;
+            selectedRestaurant.is_favorite = status;
+            resolve(selectedRestaurant);
         });
     }
 
+    static addFavoriteStatustoDB(response) {
+        return DBHelper.createDatabase()
+            .then((db) => {
+                const tx = db.transaction('restaurants', 'readwrite');
+                const store = tx.objectStore('restaurants');
+                return store.put(response);
+            })
+            .catch(DBHelper.logError);
+    }
 
     /**
      * Database URL.
@@ -130,10 +166,10 @@ class DBHelper {
     /**
      * Go to network to get restaurants
      */
-    static fetchRestaurantsFromNetwork(){
+    static fetchRestaurantsFromNetwork() {
         return fetch(DBHelper.DATABASE_URL + '/restaurants')
-        .then(DBHelper.validateJSON)
-        .then(DBHelper.defineRestaurants);
+            .then(DBHelper.validateJSON)
+            .then(DBHelper.defineRestaurants);
     }
 
     /**
@@ -154,11 +190,11 @@ class DBHelper {
                 // Add network response to IndexedDB
                 if (response.length === 0) {
                     return DBHelper.fetchRestaurantsFromNetwork()
-                    .then(response => {
-                        DBHelper.addRestaurantsToDB(response);
-                        return response;
-                    })
-                    .catch(DBHelper.logError);
+                        .then(response => {
+                            DBHelper.addRestaurantsToDB(response);
+                            return response;
+                        })
+                        .catch(DBHelper.logError);
                 }
                 return response;
             });
@@ -169,10 +205,10 @@ class DBHelper {
      */
     static fetchReviewsByIdFromNetwork(id) {
         return fetch(DBHelper.DATABASE_URL + `/reviews/?restaurant_id=${id}`)
-        .then(DBHelper.validateJSON)
-        .then(response => {
-            return response;
-        })
+            .then(DBHelper.validateJSON)
+            .then(response => {
+                return response;
+            })
 
     }
 
@@ -181,19 +217,19 @@ class DBHelper {
      * If no reviews, fetch from network
      * add to database
      */
-    static fetchReviewsById(id){
+    static fetchReviewsById(id) {
         return DBHelper.fetchReviewsFromDB()
-        .then(function(response){
-            if (response.length === 0) {
+            .then(function(response) {
+                if (response.length === 0) {
                     return DBHelper.fetchReviewsByIdFromNetwork(id)
-                    .then(response => {
-                        DBHelper.addReviewsToDB(response);
-                        return response;
-                    })
-                    .catch(DBHelper.logError);
+                        .then(response => {
+                            DBHelper.addReviewsToDB(response);
+                            return response;
+                        })
+                        .catch(DBHelper.logError);
                 }
                 return response;
-        })
+            })
     }
 
     /**
@@ -283,6 +319,24 @@ class DBHelper {
     }
 
     /**
+     * Update favorite status.
+     */
+    static addFavoriteStatus(id, status) {
+        let url = (`http://localhost:1337/restaurants/${id}/?is_favorite=${status}`);
+        return fetch(url, {
+                method: 'PUT',
+            })
+            .then(DBHelper.validateJSON)
+            .then((res) => {
+                let status = res.is_favorite;
+                let key = res.id;
+                DBHelper.updateFavouriteStatusinDB(key, status);
+
+            })
+            .catch(error => console.error('Error:', error))
+    }
+
+    /**
      * Add map script to html
      */
     static addScript() {
@@ -292,7 +346,7 @@ class DBHelper {
         target.appendChild(mapScript);
     }
 
-    static toggleMap(anchorID, mapElemID){
+    static toggleMap(anchorID, mapElemID) {
         const anchor = document.getElementById(anchorID);
         const mapFrame = document.getElementById(mapElemID);
 
