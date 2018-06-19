@@ -63,3 +63,10 @@
    cursor: pointer;
 
 }
+
+.showcase-cell > .favourite-toggle {
+    @media (min-width: 768px){
+         top: 30px;
+         right: 30px;
+    }
+}

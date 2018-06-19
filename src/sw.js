@@ -38,7 +38,6 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('fetch', (event) => {
     const requestUrl = new URL(event.request.url);
-
     if (requestUrl.origin === location.origin) {
 
         // index.html
@@ -52,7 +51,11 @@ self.addEventListener('fetch', (event) => {
             event.respondWith(servePhoto(event.request));
             return;
         }
+
     }
+
+    // Don't cache API requests
+    if (requestUrl.href.indexOf('http://localhost:1337') === 0) return;
 
     // cache default method
     // https://jakearchibald.com/2014/offline-cookbook/#on-network-response
@@ -62,6 +65,7 @@ self.addEventListener('fetch', (event) => {
         caches.open(CACHE_NAME).then(cache => {
             return cache.match(event.request).then(response => {
                 return response || fetch(event.request).then(response => {
+                    console.log(response);
                     cache.put(event.request, response.clone());
                     return response;
                 });

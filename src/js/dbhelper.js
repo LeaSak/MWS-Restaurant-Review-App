@@ -337,6 +337,50 @@ class DBHelper {
     }
 
     /**
+     * Click handler to update favourite button aria labels.
+     */
+    static toggleButtonState() {
+        document.addEventListener('click', DBHelper.updateButtonState, false);
+    }
+
+    /**
+     * Toggles aria labels and aria pressed state
+     */
+    static updateButtonState(e) {
+        const Id = e.target.dataset.action;
+
+        if (!Id) {
+
+            return;
+
+        } else {
+
+            if (e.target.dataset.action === 'save') {
+                let saveButton = e.target;
+                let restaurantId = saveButton.dataset.restaurantId;
+                console.log(restaurantId);
+                let currentState = saveButton.getAttribute('aria-pressed');
+                let pressed = 'true';
+                let labelText = 'Remove from favourites';
+
+
+                if (currentState === 'true') {
+                    pressed = 'false';
+                    labelText = 'Add to favourites';
+                }
+
+                saveButton.setAttribute('aria-pressed', pressed);
+                saveButton.setAttribute('aria-label', labelText);
+
+                //post data about restaurant to Server and IndexedDB
+                DBHelper.addFavoriteStatus(restaurantId, pressed);
+            }
+
+        }
+    }
+
+
+    /**
      * Add map script to html
      */
     static addScript() {

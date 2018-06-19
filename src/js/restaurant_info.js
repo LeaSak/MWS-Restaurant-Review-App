@@ -3,6 +3,7 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     fetchRestaurantFromURL();
     DBHelper.toggleMap('map-anchor', 'map-section');
+    DBHelper.toggleButtonState();
 });
 
 
@@ -60,6 +61,10 @@ const fillRestaurantHTML = (restaurant = self.restaurant) => {
 
     const address = document.getElementById('restaurant-address');
     address.textContent = restaurant.address;
+
+    const saveButton = document.getElementById('save');
+    saveButton.setAttribute('data-restaurant-id', restaurant.id);
+    saveButton.setAttribute('aria-pressed', restaurant.is_favorite);
 
     const image = document.getElementById('restaurant-img');
     image.setAttribute('alt', restaurant.name);
