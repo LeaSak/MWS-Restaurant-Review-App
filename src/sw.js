@@ -54,8 +54,8 @@ self.addEventListener('fetch', (event) => {
 
     }
 
-    // Don't cache API requests
-    if (requestUrl.href.indexOf('http://localhost:1337') === 0) return;
+    // Don't cache PUT/POST requests
+    if (event.request.method !== 'GET') return;
 
     // cache default method
     // https://jakearchibald.com/2014/offline-cookbook/#on-network-response
