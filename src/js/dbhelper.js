@@ -160,6 +160,7 @@ class DBHelper {
 
     static defineRestaurants(response) {
         const restaurants = response;
+        console.log('Network contact');
         return restaurants;
     }
 
@@ -323,6 +324,7 @@ class DBHelper {
      */
     static addFavoriteStatus(id, status) {
         let url = (`http://localhost:1337/restaurants/${id}/?is_favorite=${status}`);
+
         return fetch(url, {
                 method: 'PUT',
             })
@@ -378,6 +380,26 @@ class DBHelper {
 
         }
     }
+
+    // submit review to server
+    // TOD0: update database
+    static postReviewtoServer(review) {
+        const url = DBHelper.DATABASE_URL + '/reviews';
+        const options = {
+            method: 'POST',
+            body: JSON.stringify(review)
+        }
+
+        fetch(url, options)
+        .then(DBHelper.validateJSON)
+        // TODO: Add to client side DB
+        .then(response => {
+                return response;
+            });
+
+
+    }
+
 
 
     /**

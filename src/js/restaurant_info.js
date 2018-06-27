@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     fetchRestaurantFromURL();
     DBHelper.toggleMap('map-anchor', 'map-section');
     DBHelper.toggleButtonState();
+    formListener();
 });
 
 
@@ -112,6 +113,12 @@ const fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hour
     }
 };
 
+const appendReview = (review) => {
+    const ul = document.getElementById('reviews-list');
+    const formattedReview = createReviewHTML(review);
+    ul.appendChild(formattedReview);
+}
+
 /**
  * Fetch reviews from Database or network
  * Create all reviews HTML and add them to the webpage.
@@ -130,11 +137,8 @@ const fillReviewsHTML = () => {
             return;
         }
 
-        const ul = document.getElementById('reviews-list');
-
         reviews.forEach((review) => {
-            const formattedReview = createReviewHTML(review);
-            ul.appendChild(formattedReview);
+            appendReview(review);
         });
 
     })
@@ -149,7 +153,7 @@ const createReviewHTML = (review) => {
     li.classList.add('reviews-list-item');
 
     const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-    const date = new Date(review.createdAt).toLocaleString('en-US', dateOptions);
+    const date = new Date(review.updatedAt).toLocaleString('en-US', dateOptions);
 
     const nameDiv = document.createElement('div');
 
@@ -177,6 +181,39 @@ const createReviewHTML = (review) => {
 
     return li;
 };
+
+const formListener = () => {
+    const form = document.getElementById('review-form');
+    const reviewerNameInput = document.getElementById('reviewer-name');
+    const reviewerRatingInput = document.getElementById('reviewer-rating');
+    const reviewerCommentsInput = document.getElementById('review-text');
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const reviewerName = reviewerNameInput.value;
+        const reviewerRating = reviewerRatingInput.value;
+        const reviewerComments = reviewerCommentsInput.value;
+
+        const review = {
+            restaurant_id: getParameterByName('id'),
+            name: reviewerName,
+            rating: reviewerRating,
+            comments: reviewerComments,
+            updatedAt: new Date()
+
+        }
+
+        console.log(review);
+        // TODO: Could add it after form
+        appendReview(review);
+        // submit review to server
+        DBHelper.postReviewtoServer(review);
+
+
+
+    });
+
+}
 
 /**
  * Add restaurant name to the breadcrumb navigation menu
