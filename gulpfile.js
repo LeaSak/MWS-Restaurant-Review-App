@@ -24,7 +24,7 @@ const paths = {
     html: ['**/*.html', 'index.html', 'restaurants.html'],
     sass: ['scss/', 'scss/**/*.scss'],
     css: ['css/', 'css/**/*.css'],
-    js: ['js/', 'js/*.js', 'js/dbhelper.js', 'js/main.js', 'js/restaurant_info.js'],
+    js: ['js/', 'js/*.js', 'js/dbhelper.js', 'js/main.js', 'js/restaurant_info.js', 'js/offline.js'],
     vendor: ['js/vendor','js/vendor/**/*.min.js', 'js/vendor/idb.js'],
     assets: ['img/', 'img/**/*.jpg', 'img/*.jpg', 'img/webp/'],
     icons: ['icons/**/*'],

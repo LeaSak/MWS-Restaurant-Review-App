@@ -195,19 +195,21 @@ const formListener = () => {
         const reviewerComments = reviewerCommentsInput.value;
 
         const review = {
+            id: getParameterByName('id'),
             restaurant_id: getParameterByName('id'),
             name: reviewerName,
+            createdAt: new Date(),
+            updatedAt: new Date(),
             rating: reviewerRating,
-            comments: reviewerComments,
-            updatedAt: new Date()
+            comments: reviewerComments
 
         }
 
-        console.log(review);
+        //console.log(review);
         // TODO: Could add it after form
         appendReview(review);
         // submit review to server
-        DBHelper.postReviewtoServer(review);
+        DBHelper.submitPendingReview(review);
 
 
 

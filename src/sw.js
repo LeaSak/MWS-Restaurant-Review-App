@@ -1,3 +1,5 @@
+importScripts('/js/vendor/idb.min.js');
+
 const CACHE_NAME = 'restaurant-app-v1';
 const CACHE_IMAGES = 'restaurant-app-images-v1';
 
@@ -13,19 +15,6 @@ const STATIC_ASSETS = [
     'js/vendor/lazysizes.min.js',
     'https://fonts.googleapis.com/css?family=Work+Sans:400,500" rel="stylesheet'
 ];
-
-// Check for service worker and do sw registration
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').then(registration => {
-            // Registration was successful
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
-        }, function(err) {
-            // registration failed :(
-            console.log('ServiceWorker registration failed: ', err);
-        });
-    });
-}
 
 // Cache static assets on install
 self.addEventListener('install', (event) => {
@@ -74,6 +63,21 @@ self.addEventListener('fetch', (event) => {
     );
 });
 
+//Listens for a sync event,
+// post messages to client
+self.addEventListener('sync', (event) => {
+    if(event.tag === 'review-sync'){
+        console.log('sync event received by sw');
+        event.waitUntil(sendMessagetoSW({ message: 'post-reviews'}));
+    }
+});
+
+function sendMessagetoSW(message){
+    return clients.matchAll()
+    .then((clients) => {
+        clients.forEach(client => client.postMessage(message));
+    })
+}
 
 function servePhoto(request) {
     var storageUrl = request.url.replace(/-\d+\.[^.]+$/, '');
