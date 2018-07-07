@@ -17,6 +17,8 @@ In **Stage Three**, you will take the connected application you built in Stage O
 * Accessibility features.
 * A simple offline-first caching strategy using a service worker.
 * Uses IndexedDB to cache JSON responses from a Node.js server.
+* Allows users to submit a restaurant review online and offline.
+* Allows users to mark a restaurant as a favourite.
 
 ### Getting started
 ------

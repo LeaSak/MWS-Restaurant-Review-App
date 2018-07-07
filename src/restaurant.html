@@ -64,9 +64,9 @@
         <section class="reviews-grid" id="reviews-container" tabindex="-1">
             <h4 class="review-section-title">Reviews</h4>
             <ul class="reviews-list" id="reviews-list">
-                <li class="reviews-list-item review-card">
+                <li class="reviews-list-item review-card" aria-labelledby="submit-card">
                     <div class="blackbox">
-                        <p class="submit-title">Write your own Review</p>
+                        <p id="submit-card" class="submit-title">Write your own Review</p>
                     </div>
                     <form class="review-form" id="review-form" aria-label="review form">
                         <label class="form-label" for="reviewer-name">Name</label>
@@ -81,7 +81,7 @@
                         </select>
                         <label class="form-label" for="review-text">Message</label>
                         <textarea class="review-textarea" id="review-text" placeholder="Enter your review"></textarea>
-                        <button class="submit-btn" id="submit">Add Review</button>
+                        <button class="submit-btn" id="submit" aria-label="submit">Add Review</button>
                     </form>
                 </li>
             </ul>

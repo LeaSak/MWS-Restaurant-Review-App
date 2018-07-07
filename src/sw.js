@@ -10,6 +10,7 @@ const STATIC_ASSETS = [
     'css/app-restaurant.css',
     'js/dbhelper.js',
     'js/main.js',
+    'js/offline.js',
     'js/restaurant_info.js',
     'js/vendor/idb.min.js',
     'js/vendor/lazysizes.min.js',
