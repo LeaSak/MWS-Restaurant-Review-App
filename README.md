@@ -1,5 +1,6 @@
 # Mobile Web Specialist Certification Course - Project 3
 ---
+![image](screenshot/screenshot-desktop.png)
 
 ### Project Tasks
 ------
