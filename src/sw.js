@@ -1,3 +1,5 @@
+importScripts('/js/vendor/idb.min.js');
+
 const CACHE_NAME = 'restaurant-app-v1';
 const CACHE_IMAGES = 'restaurant-app-images-v1';
 
@@ -8,24 +10,12 @@ const STATIC_ASSETS = [
     'css/app-restaurant.css',
     'js/dbhelper.js',
     'js/main.js',
+    'js/offline.js',
     'js/restaurant_info.js',
     'js/vendor/idb.min.js',
     'js/vendor/lazysizes.min.js',
     'https://fonts.googleapis.com/css?family=Work+Sans:400,500" rel="stylesheet'
 ];
-
-// Check for service worker and do sw registration
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').then(registration => {
-            // Registration was successful
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
-        }, function(err) {
-            // registration failed :(
-            console.log('ServiceWorker registration failed: ', err);
-        });
-    });
-}
 
 // Cache static assets on install
 self.addEventListener('install', (event) => {
@@ -38,7 +28,6 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('fetch', (event) => {
     const requestUrl = new URL(event.request.url);
-
     if (requestUrl.origin === location.origin) {
 
         // index.html
@@ -52,7 +41,11 @@ self.addEventListener('fetch', (event) => {
             event.respondWith(servePhoto(event.request));
             return;
         }
+
     }
+
+    // Don't cache PUT/POST requests
+    if (event.request.method !== 'GET') return;
 
     // cache default method
     // https://jakearchibald.com/2014/offline-cookbook/#on-network-response
@@ -62,6 +55,7 @@ self.addEventListener('fetch', (event) => {
         caches.open(CACHE_NAME).then(cache => {
             return cache.match(event.request).then(response => {
                 return response || fetch(event.request).then(response => {
+                    console.log(response);
                     cache.put(event.request, response.clone());
                     return response;
                 });
@@ -70,10 +64,25 @@ self.addEventListener('fetch', (event) => {
     );
 });
 
+//Listens for a sync event,
+// post messages to client
+self.addEventListener('sync', (event) => {
+    if(event.tag === 'review-sync'){
+        console.log('sync event received by sw');
+        event.waitUntil(sendMessagetoSW({ message: 'post-reviews'}));
+    }
+});
+
+function sendMessagetoSW(message){
+    return clients.matchAll()
+    .then((clients) => {
+        clients.forEach(client => client.postMessage(message));
+    })
+}
 
 function servePhoto(request) {
     var storageUrl = request.url.replace(/-\d+\.[^.]+$/, '');
-    
+
     return caches.open(CACHE_IMAGES).then(cache => {
         return cache.match(storageUrl).then(response => {
             if (response) return response;

@@ -1,0 +1,2 @@
+"use strict";function registerServiceWorker(){navigator.serviceWorker&&window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").then(function(e){if(navigator.serviceWorker.controller)return console.log("SW registered"),navigator.serviceWorker.ready}).catch(function(e){return"ServiceWorker registration failed: "+e}),navigator.serviceWorker.addEventListener("message",function(e){"post-reviews"==e.data.message&&(console.log(e.data.message),DBHelper.fetchPendingReviewsFromDB())})})}registerServiceWorker();
+//# sourceMappingURL=offline.js.map
