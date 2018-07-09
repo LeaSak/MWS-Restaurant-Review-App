@@ -16,15 +16,17 @@ class DBHelper {
                     // (oldVersion is 0)
                 case 1:
                     console.log('Creating the restaurants object store');
-                    upgradeDb.createObjectStore('restaurants', { keyPath: 'id' });
+                    let restaurantStore = upgradeDb.createObjectStore('restaurants', { keyPath: 'id' });
 
                 case 2:
                     console.log('Creating the reviews object store');
-                    upgradeDb.createObjectStore('reviews', { keyPath: 'id' });
+                    let reviewStore = upgradeDb.createObjectStore('reviews', { keyPath: 'id', autoIncrement: true });
+                    reviewStore.createIndex('restaurant_id', 'restaurant_id');
+
 
                 case 3:
                     console.log('Creating the pending reviews object store');
-                    upgradeDb.createObjectStore('pending_reviews', { keyPath: 'id'});
+                    let pendingReviewStore = upgradeDb.createObjectStore('pending_reviews', { keyPath: 'id', autoIncrement: true});
             }
         })
 
@@ -94,13 +96,51 @@ class DBHelper {
     /**
      * Fetch reviews from database
      */
-    static fetchReviewsFromDB() {
+    static fetchLocalReviewsById(id) {
+        console.log('fetchReviewsfromDB');
         return DBHelper.createDatabase()
             .then((db) => {
                 const tx = db.transaction('reviews', 'readonly');
                 const store = tx.objectStore('reviews');
-                return store.getAll();
+                const index = store.index('restaurant_id');
+                return index.getAll(id);
             });
+    }
+
+    /**
+     * Go to network to get reviews by restaurant id
+     */
+    static fetchReviewsByIdFromNetwork(id) {
+        console.log('fetch reviews from network');
+        return fetch(DBHelper.DATABASE_URL + `/reviews/?restaurant_id=${id}`)
+            .then(DBHelper.validateJSON)
+            .then(response => {
+                return response;
+            })
+
+    }
+
+    /**
+     * Fetch reviews from DB
+     * If no reviews, fetch from network
+     * add to database
+     */
+    static fetchReviewsById(id) {
+        return DBHelper.fetchLocalReviewsById(id)
+            .then(function(response) {
+
+                if (response.length === 0) {
+                    return DBHelper.fetchReviewsByIdFromNetwork(id)
+                        .then(response => {
+                            DBHelper.addReviewsToDB(response);
+                            return response;
+                        })
+                        .catch(DBHelper.logError);
+                    }
+
+                return response;
+
+            })
     }
 
 
@@ -108,7 +148,7 @@ class DBHelper {
      * Update favourite status in client side database
      */
 
-    static updateLocalFavouriteStatus(response){
+    static updateLocalFavouriteStatus(response) {
         return DBHelper.createDatabase()
             .then((db) => {
                 const tx = db.transaction('restaurants', 'readwrite');
@@ -180,38 +220,6 @@ class DBHelper {
                 }
                 return response;
             });
-    }
-
-    /**
-     * Go to network to get reviews
-     */
-    static fetchReviewsByIdFromNetwork(id) {
-        return fetch(DBHelper.DATABASE_URL + `/reviews/?restaurant_id=${id}`)
-            .then(DBHelper.validateJSON)
-            .then(response => {
-                return response;
-            })
-
-    }
-
-    /**
-     * Fetch reviews from DB
-     * If no reviews, fetch from network
-     * add to database
-     */
-    static fetchReviewsById(id) {
-        return DBHelper.fetchReviewsFromDB()
-            .then(function(response) {
-                if (response.length === 0) {
-                    return DBHelper.fetchReviewsByIdFromNetwork(id)
-                        .then(response => {
-                            DBHelper.addReviewsToDB(response);
-                            return response;
-                        })
-                        .catch(DBHelper.logError);
-                }
-                return response;
-            })
     }
 
     /**
@@ -361,38 +369,54 @@ class DBHelper {
         }
     }
 
-    //submit review to server/database
-    static submitPendingReview(review){
+    /**
+     * Update server with new review
+     * If offline, request background sync
+     * cache review locally
+     */
+    static submitReview(review) {
+        // if online submit review to server
         DBHelper.postReviewtoServer(review)
-        .catch(() => {
-            DBHelper.sendSyncRequest(review);
-        });
+            .catch(() => {
+                console.log('submit review failed');
+                // if offline, send reviews to pending_reviews cache
+                DBHelper.submitPendingReviewtoDB(review);
+                DBHelper.sendSyncRequest(review);
+            });
     }
 
-    // register a sync event
-    static sendSyncRequest(review){
-        if(navigator.serviceWorker){
-            console.log('send sync request');
-            DBHelper.submitReviewtoDB(review);
+    /**
+     * Register a sync event
+     */
+    static sendSyncRequest(review) {
+        if (navigator.serviceWorker) {
             navigator.serviceWorker.ready
-            .then(reg => reg.sync.register('review-sync'));
+                .then(reg => reg.sync.register('review-sync'))
+                .then(() => console.log('Sync event registered'));
         }
     }
 
-    // submit review to server
+    /**
+     * Submit review to server
+     */
     static postReviewtoServer(review) {
-        const url = DBHelper.DATABASE_URL + '/reviews';
+        const url = 'http://localhost:1337/reviews/';
+        console.log(url);
+        console.log(review);
         const options = {
             method: 'POST',
             body: JSON.stringify(review)
         }
 
-        return fetch(url, options)
+        return fetch(url, options);
     }
 
 
-    // submit pending review to database
-    static submitReviewtoDB(review){
+    /**
+     * If offline, send review to pending_review object store
+     */
+    static submitPendingReviewtoDB(review) {
+        console.log('submit pending review to pending_reviews');
         return DBHelper.createDatabase()
             .then((db) => {
                 if (!db) {
@@ -401,42 +425,66 @@ class DBHelper {
                 const tx = db.transaction('pending_reviews', 'readwrite');
                 const store = tx.objectStore('pending_reviews');
 
+                console.log(review);
+                console.log('adding review to pending_reviews');
+
                 store.put(review);
 
-                return review;
+                return tx.complete;
             })
     }
 
-    // fetch and clear pending reviews from database
-    static fetchPendingReviewsFromDB(){
+    /**
+     * Update local database with new review
+     */
+    static submitSingleReviewtoDB(review) {
         return DBHelper.createDatabase()
-        .then(db => {
-            if (!db) {
+            .then((db) => {
+                const tx = db.transaction('reviews', 'readwrite');
+                const store = tx.objectStore('reviews');
+                return store.put(review);
+            })
+            .catch(DBHelper.logError);
+    }
+
+    /**
+     * Fetch reviews from local database
+     * to send to server
+     */
+    static fetchPendingReviewsFromDB() {
+        return DBHelper.createDatabase()
+            .then(db => {
+                if (!db) {
                     return;
                 }
                 const tx = db.transaction('pending_reviews', 'readonly');
                 const store = tx.objectStore('pending_reviews');
                 return store.getAll();
-        })
-        .then(responses => {
+            })
+            .then(responses => {
 
-            const reviews = responses || [];
+                const reviews = responses || [];
 
-            return Promise.all(reviews.map(review => {
-                console.log('post each review to server');
-                return DBHelper.postReviewtoServer(review);
+                console.log('reading reviews from pending_reviews');
+                console.log(reviews);
 
-            }));
-        })
-        .then(DBHelper.clearPendingReviews)
-        .catch(error => console.log(error));
+                return Promise.all(reviews.map(review => {
+                    console.log('post each review to server');
+                    return DBHelper.postReviewtoServer(review);
+
+                }));
+            })
+            .then(DBHelper.clearPendingReviews)
+            .catch(error => console.log(error));
     }
 
-    // clear pending reviews from database
-    static clearPendingReviews(){
+    /**
+     * Clear pending reviews from local database
+     */
+    static clearPendingReviews() {
         return DBHelper.createDatabase()
-        .then(db => {
-            if (!db) {
+            .then(db => {
+                if (!db) {
                     return;
                 }
                 const tx = db.transaction('pending_reviews', 'readwrite');
@@ -445,7 +493,7 @@ class DBHelper {
                 console.log('pending review store cleared');
                 return tx.complete;
 
-        })
+            })
 
     }
 

@@ -25,6 +25,13 @@ self.addEventListener('install', (event) => {
         }));
 });
 
+self.addEventListener('activate', function(event) {
+    console.log('SW activated');
+    if (self.clients && clients.claim) {
+        clients.claim();
+    }
+});
+
 
 self.addEventListener('fetch', (event) => {
     const requestUrl = new URL(event.request.url);
@@ -67,17 +74,21 @@ self.addEventListener('fetch', (event) => {
 //Listens for a sync event,
 // post messages to client
 self.addEventListener('sync', (event) => {
-    if(event.tag === 'review-sync'){
-        console.log('sync event received by sw');
+    console.log('firing sync');
+    if(event.tag == 'review-sync'){
+        console.log('sync event fired');
         event.waitUntil(sendMessagetoSW({ message: 'post-reviews'}));
     }
 });
 
 function sendMessagetoSW(message){
-    return clients.matchAll()
+    clients.matchAll()
     .then((clients) => {
-        clients.forEach(client => client.postMessage(message));
-    })
+        console.log('sending Message');
+        for (const client of clients) {
+            client.postMessage(message);
+        }
+    });
 }
 
 function servePhoto(request) {

@@ -1,32 +1,15 @@
-function registerServiceWorker() {
-    if (!navigator.serviceWorker) return;
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('/sw.js')
+            .then(() => {
+                navigator.serviceWorker.addEventListener('message', message => {
+                    console.log('message received');
+                    if (message.data.message === 'post-reviews') {
+                        console.log(message.data.message);
+                        DBHelper.fetchPendingReviewsFromDB();
+                    }
+                });
+            })
+            .catch(error => `ServiceWorker registration failed: ${error}`);
 
-    window.addEventListener('load', function() {
-
-        navigator.serviceWorker.register('/sw.js')
-        .then((reg) => {
-
-            if (!navigator.serviceWorker.controller) {
-                return;
-            }
-            console.log('SW registered');
-            return navigator.serviceWorker.ready;
-
-        })
-        .catch(error => `ServiceWorker registration failed: ${error}`);
-
-        navigator.serviceWorker.addEventListener('message', message => {
-            if (message.data.message == 'post-reviews') {
-                console.log(message.data.message);
-                // fetch reviews from database
-                DBHelper.fetchPendingReviewsFromDB();
-                // post them to server
-                // delete cached pending review
-            }
-        });
-
-
-    });
-}
-
-registerServiceWorker();
+    }
