@@ -8,6 +8,10 @@
                         console.log(message.data.message);
                         DBHelper.fetchPendingReviewsFromDB();
                     }
+                    if (message.data.message === 'heart-status'){
+                        console.log(message.data.message);
+                        DBHelper.fetchPendingHeartStatus();
+                    }
                 });
             })
             .catch(error => `ServiceWorker registration failed: ${error}`);

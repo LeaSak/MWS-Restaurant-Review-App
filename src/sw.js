@@ -75,9 +75,15 @@ self.addEventListener('fetch', (event) => {
 // post messages to client
 self.addEventListener('sync', (event) => {
     console.log('firing sync');
+
     if(event.tag == 'review-sync'){
         console.log('sync event fired');
         event.waitUntil(sendMessagetoSW({ message: 'post-reviews'}));
+    }
+
+    if(event.tag == 'heart-sync'){
+        console.log('sync event fired');
+        event.waitUntil(sendMessagetoSW({ message: 'heart-status'}));
     }
 });
 

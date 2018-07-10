@@ -4,6 +4,38 @@
 
 class DBHelper {
 
+    /***** HELPERS *****/
+
+    /**
+     * Database URL.
+     * Change this to restaurants.json file location on your server.
+     */
+
+    static get DATABASE_URL() {
+        const port = 1337; // Change this to your server port
+        return `http://localhost:${port}`;
+    }
+
+
+    static logError(error) {
+        console.error(error);
+    }
+
+    static validateJSON(response) {
+        if (!response.ok) {
+            throw Error(response.statusText);
+        }
+        return response.json();
+    }
+
+    static defineRestaurants(response) {
+        const restaurants = response;
+        console.log('Network contact');
+        return restaurants;
+    }
+
+    /***** DATABASE *****/
+
     /**
      * Make an IndexedDB Database
      */
@@ -26,12 +58,20 @@ class DBHelper {
 
                 case 3:
                     console.log('Creating the pending reviews object store');
-                    let pendingReviewStore = upgradeDb.createObjectStore('pending_reviews', { keyPath: 'id', autoIncrement: true});
+                    let pendingReviewStore = upgradeDb.createObjectStore('pending_reviews', { keyPath: 'id', autoIncrement: true });
+
+                case 4:
+                    console.log('Creating the pending favourite status object store');
+                    let pendingHeartStore = upgradeDb.createObjectStore('pending_heart', { keyPath: 'id', autoIncrement: true });
+
             }
         })
 
         return idbPromise;
     }
+
+
+    /***** RESTAURANTS *****/
 
     /**
      * Add restaurants to the database
@@ -67,122 +107,6 @@ class DBHelper {
                 const store = tx.objectStore('restaurants');
                 return store.getAll();
             });
-    }
-
-    /**
-     * Add reviews to the database
-     */
-    static addReviewsToDB(reviews) {
-        return DBHelper.createDatabase()
-            .then((db) => {
-                if (!db) {
-                    return;
-                }
-                const tx = db.transaction('reviews', 'readwrite');
-                const store = tx.objectStore('reviews');
-
-                return Promise.all(reviews.map(review => {
-                    console.log('adding reviews to database');
-                    return store.put(review);
-                }));
-
-            })
-            .catch((error) => {
-                tx.abort();
-                console.error(error);
-            });
-    }
-
-    /**
-     * Fetch reviews from database
-     */
-    static fetchLocalReviewsById(id) {
-        console.log('fetchReviewsfromDB');
-        return DBHelper.createDatabase()
-            .then((db) => {
-                const tx = db.transaction('reviews', 'readonly');
-                const store = tx.objectStore('reviews');
-                const index = store.index('restaurant_id');
-                return index.getAll(id);
-            });
-    }
-
-    /**
-     * Go to network to get reviews by restaurant id
-     */
-    static fetchReviewsByIdFromNetwork(id) {
-        console.log('fetch reviews from network');
-        return fetch(DBHelper.DATABASE_URL + `/reviews/?restaurant_id=${id}`)
-            .then(DBHelper.validateJSON)
-            .then(response => {
-                return response;
-            })
-
-    }
-
-    /**
-     * Fetch reviews from DB
-     * If no reviews, fetch from network
-     * add to database
-     */
-    static fetchReviewsById(id) {
-        return DBHelper.fetchLocalReviewsById(id)
-            .then(function(response) {
-
-                if (response.length === 0) {
-                    return DBHelper.fetchReviewsByIdFromNetwork(id)
-                        .then(response => {
-                            DBHelper.addReviewsToDB(response);
-                            return response;
-                        })
-                        .catch(DBHelper.logError);
-                    }
-
-                return response;
-
-            })
-    }
-
-
-    /**
-     * Update favourite status in client side database
-     */
-
-    static updateLocalFavouriteStatus(response) {
-        return DBHelper.createDatabase()
-            .then((db) => {
-                const tx = db.transaction('restaurants', 'readwrite');
-                const store = tx.objectStore('restaurants');
-                return store.put(response);
-            })
-    }
-
-    /**
-     * Database URL.
-     * Change this to restaurants.json file location on your server.
-     */
-
-    static get DATABASE_URL() {
-        const port = 1337; // Change this to your server port
-        return `http://localhost:${port}`;
-    }
-
-
-    static logError(error) {
-        console.error(error);
-    }
-
-    static validateJSON(response) {
-        if (!response.ok) {
-            throw Error(response.statusText);
-        }
-        return response.json();
-    }
-
-    static defineRestaurants(response) {
-        const restaurants = response;
-        console.log('Network contact');
-        return restaurants;
     }
 
     /**
@@ -308,66 +232,9 @@ class DBHelper {
       img/webp/${restaurant.id}-800.webp 800w`);
     }
 
-    /**
-     * Update favorite status.
-     */
-    static addFavoriteStatus(id, status) {
-        let url = (`http://localhost:1337/restaurants/${id}/?is_favorite=${status}`);
-
-        return fetch(url, {
-                method: 'PUT',
-            })
-            .then(DBHelper.validateJSON)
-            .then((res) => {
-                console.log('put request result', res);
-                DBHelper.updateLocalFavouriteStatus(res);
-
-            })
-            .catch(error => console.error('Error:', error))
-    }
-
-    /**
-     * Click handler to update favourite button aria labels.
-     */
-    static toggleButtonState() {
-        document.addEventListener('click', DBHelper.updateButtonState, false);
-    }
-
-    /**
-     * Toggles aria labels and aria pressed state
-     */
-    static updateButtonState(e) {
-        const Id = e.target.dataset.action;
-
-        if (!Id) {
-
-            return;
-
-        } else {
-
-            if (e.target.dataset.action === 'save') {
-                let saveButton = e.target;
-                let restaurantId = saveButton.dataset.restaurantId;
-                console.log(restaurantId);
-                let currentState = saveButton.getAttribute('aria-pressed');
-                let pressed = 'true';
-                let labelText = 'Remove from favourites';
 
 
-                if (currentState === 'true') {
-                    pressed = 'false';
-                    labelText = 'Add to favourites';
-                }
-
-                saveButton.setAttribute('aria-pressed', pressed);
-                saveButton.setAttribute('aria-label', labelText);
-
-                //post data about restaurant to Server and IndexedDB
-                DBHelper.addFavoriteStatus(restaurantId, pressed);
-            }
-
-        }
-    }
+    /***** REVIEWS *****/
 
     /**
      * Update server with new review
@@ -381,17 +248,91 @@ class DBHelper {
                 console.log('submit review failed');
                 // if offline, send reviews to pending_reviews cache
                 DBHelper.submitPendingReviewtoDB(review);
-                DBHelper.sendSyncRequest(review);
+                DBHelper.sendSyncRequest('review-sync');
             });
+    }
+
+    /**
+     * Add reviews to the database
+     */
+    static addReviewsToDB(reviews) {
+        return DBHelper.createDatabase()
+            .then((db) => {
+                if (!db) {
+                    return;
+                }
+                const tx = db.transaction('reviews', 'readwrite');
+                const store = tx.objectStore('reviews');
+
+                return Promise.all(reviews.map(review => {
+                    console.log('adding reviews to database');
+                    return store.put(review);
+                }));
+
+            })
+            .catch((error) => {
+                tx.abort();
+                console.error(error);
+            });
+    }
+
+    /**
+     * Fetch reviews from database
+     */
+    static fetchLocalReviewsById(id) {
+        console.log('fetchReviewsfromDB');
+        return DBHelper.createDatabase()
+            .then((db) => {
+                const tx = db.transaction('reviews', 'readonly');
+                const store = tx.objectStore('reviews');
+                const index = store.index('restaurant_id');
+                return index.getAll(id);
+            });
+    }
+
+    /**
+     * Go to network to get reviews by restaurant id
+     */
+    static fetchReviewsByIdFromNetwork(id) {
+        console.log('fetch reviews from network');
+        return fetch(DBHelper.DATABASE_URL + `/reviews/?restaurant_id=${id}`)
+            .then(DBHelper.validateJSON)
+            .then(response => {
+                return response;
+            })
+
+    }
+
+    /**
+     * Fetch reviews from DB
+     * If no reviews, fetch from network
+     * add to database
+     */
+    static fetchReviewsById(id) {
+        return DBHelper.fetchLocalReviewsById(id)
+            .then(function(response) {
+
+                if (response.length === 0) {
+                    return DBHelper.fetchReviewsByIdFromNetwork(id)
+                        .then(response => {
+                            DBHelper.addReviewsToDB(response);
+                            return response;
+                        })
+                        .catch(DBHelper.logError);
+                }
+
+                return response;
+
+            })
     }
 
     /**
      * Register a sync event
      */
-    static sendSyncRequest(review) {
+    static sendSyncRequest(sync_tag) {
         if (navigator.serviceWorker) {
             navigator.serviceWorker.ready
-                .then(reg => reg.sync.register('review-sync'))
+                .then(reg => reg.sync.register(sync_tag))
                 .then(() => console.log('Sync event registered'));
         }
     }
@@ -497,6 +438,187 @@ class DBHelper {
 
     }
 
+
+    /***** FAVORITE TOGGLE *****/
+
+    /**
+     * Update favourite status in client side database
+     */
+
+    static updateLocalFavouriteStatus(response) {
+        return DBHelper.createDatabase()
+            .then((db) => {
+                const tx = db.transaction('restaurants', 'readwrite');
+                const store = tx.objectStore('restaurants');
+                return store.put(response);
+            })
+    }
+
+    /**
+     * Update favourite status in client side database, independent of PUT request
+     */
+
+    static updateFavoriteStatusLocally(id, pressed) {
+        DBHelper.fetchFavouriteStatusLocally(id)
+            .then(response => {
+                console.log(response.is_favorite, 'old status from fetch');
+                const restaurant = response;
+                restaurant.is_favorite = pressed;
+                console.log(response.is_favorite, 'new status');
+
+                DBHelper.addFavoriteStatusLocally(restaurant);
+            })
+            .catch(DBHelper.logError)
+
+    }
+
+    static fetchFavouriteStatusLocally(id) {
+        return DBHelper.createDatabase()
+            .then((db) => {
+                const tx = db.transaction('restaurants', 'readonly');
+                const store = tx.objectStore('restaurants');
+                const selectedRestaurant = store.get(parseInt(id));
+                return selectedRestaurant;
+
+            })
+    }
+
+    static addFavoriteStatusLocally(restaurant) {
+        return DBHelper.createDatabase()
+            .then((db) => {
+                const tx = db.transaction('restaurants', 'readwrite');
+                const store = tx.objectStore('restaurants');
+                return store.put(restaurant);
+            })
+            .catch(DBHelper.logError);
+    }
+
+    /**
+     * Update favorite status.
+     */
+    static addFavoriteStatus(id, status) {
+        let url = (`http://localhost:1337/restaurants/${id}/?is_favorite=${status}`);
+
+        return fetch(url, {
+                method: 'PUT',
+            })
+            .catch(() => {
+                DBHelper.fetchFavouriteStatusLocally(id)
+                .then(res => {
+                    console.log(res, 'catch response');
+                    DBHelper.addPendingHeartStatus(res);
+                    console.log('pending heart status added')
+                })
+                .catch(DBHelper.logError);
+                DBHelper.sendSyncRequest('heart-sync');
+            })
+    }
+
+    static retryPostHeartStatus(id, status){
+        let url = (`http://localhost:1337/restaurants/${id}/?is_favorite=${status}`);
+
+        return fetch(url, {
+                method: 'PUT',
+            });
+    }
+
+    static addPendingHeartStatus(restaurant){
+        return DBHelper.createDatabase()
+            .then((db) => {
+                const tx = db.transaction('pending_heart', 'readwrite');
+                const store = tx.objectStore('pending_heart');
+                return store.put(restaurant);
+            })
+            .catch(DBHelper.logError);
+    }
+
+    static fetchPendingHeartStatus(){
+        return DBHelper.createDatabase()
+            .then((db) => {
+                const tx = db.transaction('pending_heart', 'readonly');
+                const store = tx.objectStore('pending_heart');
+                return store.getAll();
+            })
+            .then(res => {
+                const restaurants = res || [];
+
+                console.log('reading restaurants from pending_heart');
+                console.log(restaurants);
+
+                return Promise.all(restaurants.map(restaurant => {
+                    console.log('post each favourite status to server');
+                    return DBHelper.retryPostHeartStatus(restaurant.id, restaurant.is_favorite);
+
+                }));
+
+            })
+            .then(DBHelper.clearPendingHearts)
+            .catch(DBHelper.logError);
+    }
+
+    static clearPendingHearts() {
+        return DBHelper.createDatabase()
+            .then(db => {
+                if (!db) {
+                    return;
+                }
+                const tx = db.transaction('pending_heart', 'readwrite');
+                const store = tx.objectStore('pending_heart');
+                store.clear();
+                console.log('pending heart store cleared');
+                return tx.complete;
+
+            })
+
+    }
+
+
+    /**
+     * Click handler to update favourite button aria labels.
+     */
+    static toggleButtonState() {
+        document.addEventListener('click', DBHelper.updateButtonState, false);
+    }
+
+    /**
+     * Toggles aria labels and aria pressed state
+     */
+    static updateButtonState(e) {
+        const Id = e.target.dataset.action;
+
+        if (!Id) {
+
+            return;
+
+        } else {
+
+            if (e.target.dataset.action === 'save') {
+                let saveButton = e.target;
+                let restaurantId = saveButton.dataset.restaurantId;
+                console.log(restaurantId);
+                let currentState = saveButton.getAttribute('aria-pressed');
+                let pressed = 'true';
+                let labelText = 'Remove from favourites';
+
+
+                if (currentState === 'true') {
+                    pressed = 'false';
+                    labelText = 'Add to favourites';
+                }
+
+                saveButton.setAttribute('aria-pressed', pressed);
+                saveButton.setAttribute('aria-label', labelText);
+
+                //post data about restaurant to Server and IndexedDB
+                DBHelper.updateFavoriteStatusLocally(restaurantId, pressed);
+                DBHelper.addFavoriteStatus(restaurantId, pressed);
+            }
+
+        }
+    }
+
+
+    /***** MAP TOGGLE *****/
 
     /**
      * Add map script to html
